@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include <QFile>
+
 class QFileSystemModel;
 
 namespace Ui {
@@ -26,10 +28,15 @@ private slots:
 
     void on_treeView_clicked(const QModelIndex &index);
 
+    void on_actionSave_triggered();
+
 private:
     Ui::MainWindow *ui;
 
      QFileSystemModel *filesystemModel;
+     QString currentOpenedSourceFilePath;
+
+     void saveCurrentOpenedSourceFilePath();
 };
 
 #endif // MAINWINDOW_H

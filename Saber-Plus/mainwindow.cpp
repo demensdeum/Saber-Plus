@@ -39,6 +39,22 @@ void MainWindow::on_actionAbout_triggered()
     QMessageBox::about(this,"Saber-Plus","Simple, fast code editor by Demens Deum 2017");
 }
 
+void MainWindow::saveCurrentOpenedSourceFilePath()
+{
+    if (currentOpenedSourceFilePath.length() > 0) {
+
+        QFile outputFile(currentOpenedSourceFilePath);
+        outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
+
+        QTextStream fileOutput(&outputFile);
+        fileOutput << ui->textEdit->toPlainText();
+
+        outputFile.close();
+
+        qDebug() << "Changes to file saved " << currentOpenedSourceFilePath;
+    }
+}
+
 void MainWindow::on_treeView_clicked(const QModelIndex &index)
 {
     qDebug() << "treeViewClicked";
@@ -51,12 +67,26 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 
         qDebug() << "Source file found";
 
+        if (currentOpenedSourceFilePath.length() > 0) {
+
+            saveCurrentOpenedSourceFilePath();
+        }
+
         QFile sourceFile(filePath);
 
         sourceFile.open(QIODevice::ReadOnly);
 
         auto sourceFileContent = sourceFile.readAll();
 
+        sourceFile.close();
+
         ui->textEdit->setText(sourceFileContent);
+
+        currentOpenedSourceFilePath = filePath;
     }
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    saveCurrentOpenedSourceFilePath();
 }

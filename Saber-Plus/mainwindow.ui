@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>770</width>
-    <height>572</height>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,6 +32,12 @@
       <width>521</width>
       <height>321</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>1</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
    </widget>
    <widget class="QTreeView" name="treeView_2">
@@ -108,32 +114,32 @@
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save</string>
+    <string>&amp;Save</string>
    </property>
   </action>
   <action name="actionSave_All">
    <property name="text">
-    <string>Save All</string>
+    <string>Sa&amp;ve All</string>
    </property>
   </action>
   <action name="actionClean">
    <property name="text">
-    <string>Clean</string>
+    <string>&amp;Clean</string>
    </property>
   </action>
   <action name="actionBuild">
    <property name="text">
-    <string>Build</string>
+    <string>&amp;Build</string>
    </property>
   </action>
   <action name="actionBuild_Run">
    <property name="text">
-    <string>Build &amp; Run</string>
+    <string>Build  &amp;Run</string>
    </property>
   </action>
   <action name="actionDebug">
    <property name="text">
-    <string>Debug</string>
+    <string>&amp;Debug</string>
    </property>
   </action>
  </widget>
