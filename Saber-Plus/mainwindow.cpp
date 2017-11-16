@@ -5,17 +5,13 @@
 #include <QMessageBox>
 #include <QFileSystemModel>
 #include <QDebug>
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    filesystemModel = new QFileSystemModel;
-    filesystemModel->setRootPath(QDir::currentPath());
-
-    ui->treeView->setModel(filesystemModel);
 }
 
 
@@ -26,7 +22,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_CMAKE_Project_triggered()
 {
-    QFileDialog::getOpenFileName(nullptr, "Open CMAKE project file", "", "", nullptr, nullptr);
+    currentCmakeFilePath = QFileDialog::getOpenFileName(nullptr, "Open CMAKE project file", "", "", nullptr, nullptr);
+
+    currentCMakeRootPath = QFileInfo(currentCmakeFilePath).absoluteDir().absolutePath();
+
+    filesystemModel = new QFileSystemModel;
+    filesystemModel->setRootPath(currentCMakeRootPath);
+
+    ui->treeView->setModel(filesystemModel);
+    ui->treeView->setRootIndex(filesystemModel->setRootPath(currentCMakeRootPath));
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -63,7 +67,7 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 
     qDebug() << filePath;
 
-    if (filePath.contains(".cpp") || filePath.contains(".h")) {
+    if (filePath.contains(".cpp") || filePath.contains(".h") || filePath.contains(".txt")) {
 
         qDebug() << "Source file found";
 
@@ -89,4 +93,42 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 void MainWindow::on_actionSave_triggered()
 {
     saveCurrentOpenedSourceFilePath();
+}
+
+void MainWindow::on_actionBuild_triggered()
+{
+    prebuild();
+    build();
+}
+
+void MainWindow::build()
+{
+    QString buildString;
+    buildString = "make";
+
+    QProcess process;
+
+    process.setWorkingDirectory(currentCMakeRootPath);
+    process.start(buildString);
+    process.waitForFinished();
+
+    auto output = process.readAllStandardOutput();
+
+    ui->textBrowser->setText(output);
+}
+
+void MainWindow::prebuild()
+{
+    QString buildString;
+    buildString = "cmake .";
+
+    QProcess process;
+
+    process.setWorkingDirectory(currentCMakeRootPath);
+    process.start(buildString);
+    process.waitForFinished();
+
+    auto output = process.readAllStandardOutput();
+
+    ui->textBrowser->setText(output);
 }

@@ -30,13 +30,20 @@ private slots:
 
     void on_actionSave_triggered();
 
+    void on_actionBuild_triggered();
+
 private:
     Ui::MainWindow *ui;
 
      QFileSystemModel *filesystemModel;
+
      QString currentOpenedSourceFilePath;
+     QString currentCmakeFilePath;
+     QString currentCMakeRootPath;
 
      void saveCurrentOpenedSourceFilePath();
+     void prebuild();
+     void build();
 };
 
 #endif // MAINWINDOW_H

@@ -40,7 +40,7 @@
      </sizepolicy>
     </property>
    </widget>
-   <widget class="QTreeView" name="treeView_2">
+   <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -66,7 +66,6 @@
     </property>
     <addaction name="actionOpen_CMAKE_Project"/>
     <addaction name="actionSave"/>
-    <addaction name="actionSave_All"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
