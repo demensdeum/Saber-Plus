@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QFileSystemModel>
 #include <QDebug>
-#include <QProcess>
+#include <QThread>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -151,4 +151,20 @@ void MainWindow::clean()
 void MainWindow::on_actionClean_triggered()
 {
     clean();
+}
+
+void MainWindow::run()
+{
+    runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", "", "", nullptr, nullptr);
+
+    process = new QProcess();
+    process->setWorkingDirectory(currentCMakeRootPath);
+    process->start(runFilePath);
+}
+
+void MainWindow::on_actionBuild_Run_triggered()
+{
+    prebuild();
+    build();
+    run();
 }

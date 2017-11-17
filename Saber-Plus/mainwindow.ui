@@ -133,7 +133,7 @@
   </action>
   <action name="actionBuild_Run">
    <property name="text">
-    <string>Build  &amp;Run</string>
+    <string>Build  and Run</string>
    </property>
   </action>
   <action name="actionDebug">

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include <QFile>
+#include <QProcess>
 
 class QFileSystemModel;
 
@@ -34,6 +35,8 @@ private slots:
 
     void on_actionClean_triggered();
 
+    void on_actionBuild_Run_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -42,11 +45,14 @@ private:
      QString currentOpenedSourceFilePath;
      QString currentCmakeFilePath;
      QString currentCMakeRootPath;
+     QString runFilePath;
+     QProcess *process;
 
      void saveCurrentOpenedSourceFilePath();
      void prebuild();
      void build();
      void clean();
+     void run();
 };
 
 #endif // MAINWINDOW_H
