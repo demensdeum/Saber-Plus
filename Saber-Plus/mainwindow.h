@@ -32,6 +32,8 @@ private slots:
 
     void on_actionBuild_triggered();
 
+    void on_actionClean_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -44,6 +46,7 @@ private:
      void saveCurrentOpenedSourceFilePath();
      void prebuild();
      void build();
+     void clean();
 };
 
 #endif // MAINWINDOW_H

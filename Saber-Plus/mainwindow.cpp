@@ -132,3 +132,23 @@ void MainWindow::prebuild()
 
     ui->textBrowser->setText(output);
 }
+
+void MainWindow::clean()
+{
+    QString cmakeFilesPath = currentCMakeRootPath + "/CMakeFiles";
+    QString cmakeInstallFilePath = currentCMakeRootPath + "/cmake_install.cmake";
+    QString cmakeCachePath = currentCMakeRootPath + "/CMakeCache.txt";
+    QString makeFilePath = currentCMakeRootPath + "Makefile";
+
+    auto projectDirectory = QDir(cmakeFilesPath);
+    projectDirectory.removeRecursively();
+
+    QFile::remove(cmakeInstallFilePath);
+    QFile::remove(cmakeCachePath);
+    QFile::remove(makeFilePath);
+}
+
+void MainWindow::on_actionClean_triggered()
+{
+    clean();
+}
