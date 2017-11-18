@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    runFilePath = nullptr;
+
     ui->setupUi(this);
 }
 
@@ -106,15 +108,13 @@ void MainWindow::build()
     QString buildString;
     buildString = "make";
 
-    QProcess process;
+    process = new QProcess();
+    process->setWorkingDirectory(currentCMakeRootPath);
+    process->start(buildString);
 
-    process.setWorkingDirectory(currentCMakeRootPath);
-    process.start(buildString);
-    process.waitForFinished();
+    processOutput = "";
 
-    auto output = process.readAllStandardOutput();
-
-    ui->textBrowser->setText(output);
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
 }
 
 void MainWindow::prebuild()
@@ -122,15 +122,14 @@ void MainWindow::prebuild()
     QString buildString;
     buildString = "cmake .";
 
-    QProcess process;
+    process = new QProcess();
 
-    process.setWorkingDirectory(currentCMakeRootPath);
-    process.start(buildString);
-    process.waitForFinished();
+    process->setWorkingDirectory(currentCMakeRootPath);
+    process->start(buildString);
 
-    auto output = process.readAllStandardOutput();
+    processOutput = "";
 
-    ui->textBrowser->setText(output);
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
 }
 
 void MainWindow::clean()
@@ -153,13 +152,27 @@ void MainWindow::on_actionClean_triggered()
     clean();
 }
 
+void MainWindow::readyReadStandardOutput()
+{
+    auto output = process->readAllStandardOutput();
+
+    processOutput += output;
+
+    ui->textBrowser->setText(processOutput);
+}
+
 void MainWindow::run()
 {
-    runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", "", "", nullptr, nullptr);
+    if (runFilePath == nullptr)
+    {
+        runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", "", "", nullptr, nullptr);
+    }
 
     process = new QProcess();
     process->setWorkingDirectory(currentCMakeRootPath);
     process->start(runFilePath);
+
+    QObject::connect(process, &QProcess::readChannelFinished, this, &MainWindow::readyReadStandardOutput);
 }
 
 void MainWindow::on_actionBuild_Run_triggered()

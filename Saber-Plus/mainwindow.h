@@ -46,6 +46,8 @@ private:
      QString currentCmakeFilePath;
      QString currentCMakeRootPath;
      QString runFilePath;
+
+     QString processOutput;
      QProcess *process;
 
      void saveCurrentOpenedSourceFilePath();
@@ -53,6 +55,8 @@ private:
      void build();
      void clean();
      void run();
+
+     void readyReadStandardOutput();
 };
 
 #endif // MAINWINDOW_H
