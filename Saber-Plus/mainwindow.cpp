@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    runFilePath = nullptr;
+    runFilePath = "";
 
     ui->setupUi(this);
 }
@@ -33,6 +33,8 @@ void MainWindow::on_actionOpen_CMAKE_Project_triggered()
 
     ui->treeView->setModel(filesystemModel);
     ui->treeView->setRootIndex(filesystemModel->setRootPath(currentCMakeRootPath));
+
+    runFilePath = "";
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -163,9 +165,14 @@ void MainWindow::readyReadStandardOutput()
 
 void MainWindow::run()
 {
-    if (runFilePath == nullptr)
+    if (runFilePath.length() < 1)
     {
         runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", "", "", nullptr, nullptr);
+    }
+
+    if (runFilePath.length() < 1)
+    {
+        return;
     }
 
     process = new QProcess();
