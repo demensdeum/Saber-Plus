@@ -26,6 +26,11 @@ void MainWindow::on_actionOpen_CMAKE_Project_triggered()
 {
     currentCmakeFilePath = QFileDialog::getOpenFileName(nullptr, "Open CMAKE project file", "", "", nullptr, nullptr);
 
+    if (currentCmakeFilePath.length() < 1)
+    {
+        return;
+    }
+
     currentCMakeRootPath = QFileInfo(currentCmakeFilePath).absoluteDir().absolutePath();
 
     filesystemModel = new QFileSystemModel;

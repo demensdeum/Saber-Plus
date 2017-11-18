@@ -14,8 +14,14 @@ TEMPLATE = app
 CONFIG += c++14
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    spdebugger.cpp \
+    spbreakpoint.cpp \
+    spnode.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    spdebugger.h \
+    spbreakpoint.h \
+    spnode.h
 
 FORMS    += mainwindow.ui
