@@ -33,6 +33,9 @@ void MainWindow::on_actionOpen_CMAKE_Project_triggered()
 
     ui->treeView->setModel(filesystemModel);
     ui->treeView->setRootIndex(filesystemModel->setRootPath(currentCMakeRootPath));
+    ui->treeView->setColumnHidden(1, true);
+    ui->treeView->setColumnHidden(2, true);
+    ui->treeView->setColumnHidden(3, true);
 
     runFilePath = "";
 }
@@ -139,7 +142,7 @@ void MainWindow::clean()
     QString cmakeFilesPath = currentCMakeRootPath + "/CMakeFiles";
     QString cmakeInstallFilePath = currentCMakeRootPath + "/cmake_install.cmake";
     QString cmakeCachePath = currentCMakeRootPath + "/CMakeCache.txt";
-    QString makeFilePath = currentCMakeRootPath + "Makefile";
+    QString makeFilePath = currentCMakeRootPath + "/Makefile";
 
     auto projectDirectory = QDir(cmakeFilesPath);
     projectDirectory.removeRecursively();
@@ -167,7 +170,7 @@ void MainWindow::run()
 {
     if (runFilePath.length() < 1)
     {
-        runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", "", "", nullptr, nullptr);
+        runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", currentCMakeRootPath, "", nullptr, nullptr);
     }
 
     if (runFilePath.length() < 1)
@@ -178,6 +181,8 @@ void MainWindow::run()
     process = new QProcess();
     process->setWorkingDirectory(currentCMakeRootPath);
     process->start(runFilePath);
+
+    processOutput = "";
 
     QObject::connect(process, &QProcess::readChannelFinished, this, &MainWindow::readyReadStandardOutput);
 }
