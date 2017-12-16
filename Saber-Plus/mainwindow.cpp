@@ -79,7 +79,7 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 
     qDebug() << filePath;
 
-    if (filePath.contains(".cpp") || filePath.contains(".h") || filePath.contains(".txt")) {
+    if (filePath.contains(".cpp") || filePath.contains(".h") || filePath.contains(".txt") || filePath.endsWith("CMakeLists.txt")) {
 
         qDebug() << "Source file found";
 
@@ -120,26 +120,30 @@ void MainWindow::build()
 
     process = new QProcess();
     process->setWorkingDirectory(currentCMakeRootPath);
+
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
+    QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
+
     process->start(buildString);
 
     processOutput = "";
-
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
 }
 
 void MainWindow::prebuild()
 {
     QString buildString;
-    buildString = "cmake .";
+    buildString = "cmake -DCMAKE_BUILD_TYPE=Debug .";
 
     process = new QProcess();
 
     process->setWorkingDirectory(currentCMakeRootPath);
+
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
+    QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
+
     process->start(buildString);
 
     processOutput = "";
-
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
 }
 
 void MainWindow::clean()
@@ -171,6 +175,15 @@ void MainWindow::readyReadStandardOutput()
     ui->textBrowser->setText(processOutput);
 }
 
+void MainWindow::readyReadStandardError()
+{
+    auto output = process->readAllStandardError();
+
+    processOutput += output;
+
+    ui->textBrowser->setText(processOutput);
+}
+
 void MainWindow::run()
 {
     if (runFilePath.length() < 1)
@@ -185,11 +198,13 @@ void MainWindow::run()
 
     process = new QProcess();
     process->setWorkingDirectory(currentCMakeRootPath);
+
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
+    QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
+
     process->start(runFilePath);
 
     processOutput = "";
-
-    QObject::connect(process, &QProcess::readChannelFinished, this, &MainWindow::readyReadStandardOutput);
 }
 
 void MainWindow::on_actionBuild_Run_triggered()
@@ -197,4 +212,24 @@ void MainWindow::on_actionBuild_Run_triggered()
     prebuild();
     build();
     run();
+}
+
+void MainWindow::on_actionDebug_triggered()
+{
+    if (runFilePath.length() < 1)
+    {
+        runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", currentCMakeRootPath, "", nullptr, nullptr);
+    }
+
+    if (runFilePath.length() < 1)
+    {
+        return;
+    }
+
+    process = new QProcess();
+
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
+    QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
+
+    process->start("lldb " + runFilePath);
 }

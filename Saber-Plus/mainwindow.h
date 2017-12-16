@@ -37,6 +37,8 @@ private slots:
 
     void on_actionBuild_Run_triggered();
 
+    void on_actionDebug_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -57,6 +59,7 @@ private:
      void run();
 
      void readyReadStandardOutput();
+     void readyReadStandardError();
 };
 
 #endif // MAINWINDOW_H
