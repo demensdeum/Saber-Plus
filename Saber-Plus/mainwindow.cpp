@@ -6,6 +6,7 @@
 #include <QFileSystemModel>
 #include <QDebug>
 #include <QThread>
+#include <QScrollBar>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -96,7 +97,7 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 
         sourceFile.close();
 
-        ui->textEdit->setText(sourceFileContent);
+        ui->textEdit->document()->setPlainText(sourceFileContent);
 
         currentOpenedSourceFilePath = filePath;
     }
@@ -118,15 +119,16 @@ void MainWindow::build()
     QString buildString;
     buildString = "make";
 
+    processOutput = "";
+
     process = new QProcess();
     process->setWorkingDirectory(currentCMakeRootPath);
+    process->setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-    QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
+    //QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
 
     process->start(buildString);
-
-    processOutput = "";
 }
 
 void MainWindow::prebuild()
@@ -134,16 +136,17 @@ void MainWindow::prebuild()
     QString buildString;
     buildString = "cmake -DCMAKE_BUILD_TYPE=Debug .";
 
+    processOutput = "";
+
     process = new QProcess();
 
     process->setWorkingDirectory(currentCMakeRootPath);
+    process->setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-    QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
+    //QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
 
     process->start(buildString);
-
-    processOutput = "";
 }
 
 void MainWindow::clean()
@@ -173,6 +176,9 @@ void MainWindow::readyReadStandardOutput()
     processOutput += output;
 
     ui->textBrowser->setText(processOutput);
+
+    auto verticalScrollBar = ui->textBrowser->verticalScrollBar();
+    verticalScrollBar->setValue(verticalScrollBar->maximum());
 }
 
 void MainWindow::readyReadStandardError()
@@ -196,15 +202,15 @@ void MainWindow::run()
         return;
     }
 
+    processOutput = "";
+
     process = new QProcess();
     process->setWorkingDirectory(currentCMakeRootPath);
+    process->setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-    QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
 
     process->start(runFilePath);
-
-    processOutput = "";
 }
 
 void MainWindow::on_actionBuild_Run_triggered()
@@ -227,9 +233,17 @@ void MainWindow::on_actionDebug_triggered()
     }
 
     process = new QProcess();
+    process->setWorkingDirectory(currentCMakeRootPath);
+    process->setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-    QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
 
     process->start("lldb " + runFilePath);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    auto commandText = ui->plainTextEdit->toPlainText() + "\n";
+
+    process->write(commandText.toUtf8());
 }

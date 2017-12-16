@@ -39,6 +39,8 @@ private slots:
 
     void on_actionDebug_triggered();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -57,6 +59,7 @@ private:
      void build();
      void clean();
      void run();
+     void sendCommand();
 
      void readyReadStandardOutput();
      void readyReadStandardError();

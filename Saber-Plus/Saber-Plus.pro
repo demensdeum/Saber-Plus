@@ -17,11 +17,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     spdebugger.cpp \
     spbreakpoint.cpp \
-    spnode.cpp
+    spnode.cpp \
+    codeeditor.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
     spbreakpoint.h \
-    spnode.h
+    spnode.h \
+    codeeditor.h
 
 FORMS    += mainwindow.ui

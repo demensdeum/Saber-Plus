@@ -14,13 +14,13 @@
    <string>Saber-Plus</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_5">
+    <item row="0" column="0">
      <widget class="QSplitter" name="splitter_3">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QSplitter" name="splitter">
+      <widget class="QSplitter" name="splitter_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -35,7 +35,7 @@
          </attribute>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QTextEdit" name="textEdit"/>
+           <widget class="CodeEditor" name="textEdit" native="true"/>
           </item>
          </layout>
         </widget>
@@ -71,12 +71,17 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QSplitter" name="splitter_2">
+      <widget class="QSplitter" name="splitter">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QTreeView" name="variablesView"/>
        <widget class="QTextBrowser" name="textBrowser"/>
+       <widget class="QPlainTextEdit" name="plainTextEdit"/>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Send Command</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -166,6 +171,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CodeEditor</class>
+   <extends>QWidget</extends>
+   <header>codeeditor.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
