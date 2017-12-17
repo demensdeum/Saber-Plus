@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <QWidget>
+#include <QProcess>
 
 #include "spproject.h"
 
@@ -47,6 +48,7 @@ public:
 
 private:
     shared_ptr<SPProject> project;
+    shared_ptr<QProcess> process;
 
 };
 

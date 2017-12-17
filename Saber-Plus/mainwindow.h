@@ -71,7 +71,6 @@ private:
      void saveCurrentOpenedSourceFilePath();
      void prebuild();
      void build();
-     void clean();
      void run();
      void sendCommand();
 

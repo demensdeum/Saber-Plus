@@ -153,24 +153,9 @@ void MainWindow::prebuild()
     process->start(buildString);
 }
 
-void MainWindow::clean()
-{
-    QString cmakeFilesPath = currentCMakeRootPath + "/CMakeFiles";
-    QString cmakeInstallFilePath = currentCMakeRootPath + "/cmake_install.cmake";
-    QString cmakeCachePath = currentCMakeRootPath + "/CMakeCache.txt";
-    QString makeFilePath = currentCMakeRootPath + "/Makefile";
-
-    auto projectDirectory = QDir(cmakeFilesPath);
-    projectDirectory.removeRecursively();
-
-    QFile::remove(cmakeInstallFilePath);
-    QFile::remove(cmakeCachePath);
-    QFile::remove(makeFilePath);
-}
-
 void MainWindow::on_actionClean_triggered()
 {
-    clean();
+    presenter->cleanProject();
 }
 
 void MainWindow::readyReadStandardOutput()
@@ -196,25 +181,7 @@ void MainWindow::readyReadStandardError()
 
 void MainWindow::run()
 {
-    if (runFilePath.length() < 1)
-    {
-        runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", currentCMakeRootPath, "", nullptr, nullptr);
-    }
-
-    if (runFilePath.length() < 1)
-    {
-        return;
-    }
-
-    processOutput = "";
-
-    process = new QProcess();
-    process->setWorkingDirectory(currentCMakeRootPath);
-    process->setProcessChannelMode(QProcess::MergedChannels);
-
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-
-    process->start(runFilePath);
+    presenter->runProcess();
 }
 
 void MainWindow::on_actionBuild_Run_triggered()
@@ -259,7 +226,7 @@ void MainWindow::on_actionRun_triggered()
 
 void MainWindow::on_actionStop_triggered()
 {
-    process->kill();
+    presenter->killProcess();
 }
 
 void MainWindow::on_actionNew_Project_triggered()
