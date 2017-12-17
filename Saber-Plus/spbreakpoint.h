@@ -5,7 +5,10 @@
 class SPBreakpoint
 {
 public:
-    SPBreakpoint();
+    SPBreakpoint(int line);
+
+    int line;
+
 };
 
 #endif // SPBREAKPOINT_H

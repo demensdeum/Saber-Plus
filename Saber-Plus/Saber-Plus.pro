@@ -18,12 +18,20 @@ SOURCES += main.cpp\
     spdebugger.cpp \
     spbreakpoint.cpp \
     spnode.cpp \
-    codeeditor.cpp
+    codeeditor.cpp \
+    sppresenter.cpp \
+    spproject.cpp \
+    spfile.cpp \
+    spserializable.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
     spbreakpoint.h \
     spnode.h \
-    codeeditor.h
+    codeeditor.h \
+    sppresenter.h \
+    spproject.h \
+    spfile.h \
+    spserializable.h
 
 FORMS    += mainwindow.ui

@@ -1,7 +1,7 @@
 #include "spbreakpoint.h"
 
-SPBreakpoint::SPBreakpoint()
+SPBreakpoint::SPBreakpoint(int line)
 {
-
+    this->line = line;
 }
 

@@ -16,10 +16,16 @@ public:
 
     void setBreakpoint(shared_ptr<SPBreakpoint> breakpoint);
 
+    void run();
+
     void stepIn();
     void stepOut();
 
     void nextLine();
+    void continueProcess();
+
+private:
+    vector<SPBreakpoint> breakpoints;
 
     vector<SPNode> stacktrace();
     vector<SPNode> variables();

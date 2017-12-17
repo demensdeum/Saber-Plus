@@ -14,7 +14,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     runFilePath = "";
 
+    process = nullptr;
+
     ui->setupUi(this);
+
+    presenter = make_shared<SPPresenter>(this, this);
 }
 
 
@@ -25,25 +29,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_CMAKE_Project_triggered()
 {
-    currentCmakeFilePath = QFileDialog::getOpenFileName(nullptr, "Open CMAKE project file", "", "", nullptr, nullptr);
+    presenter->openProject();
+}
 
-    if (currentCmakeFilePath.length() < 1)
-    {
+void MainWindow::updateCurrentPath(shared_ptr<string> path)
+{
+    if (path->length() < 1) {
+
         return;
+
     }
 
-    currentCMakeRootPath = QFileInfo(currentCmakeFilePath).absoluteDir().absolutePath();
+    auto filesystemModelPath = QString(path->c_str());
 
     filesystemModel = new QFileSystemModel;
-    filesystemModel->setRootPath(currentCMakeRootPath);
+    filesystemModel->setRootPath(filesystemModelPath);
 
     ui->treeView->setModel(filesystemModel);
-    ui->treeView->setRootIndex(filesystemModel->setRootPath(currentCMakeRootPath));
+    ui->treeView->setRootIndex(filesystemModel->setRootPath(filesystemModelPath));
     ui->treeView->setColumnHidden(1, true);
     ui->treeView->setColumnHidden(2, true);
     ui->treeView->setColumnHidden(3, true);
-
-    runFilePath = "";
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -53,7 +59,7 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-    QMessageBox::about(this,"Saber-Plus","Simple, fast code editor by Demens Deum 2017");
+    presenter->showAboutInformation();
 }
 
 void MainWindow::saveCurrentOpenedSourceFilePath()
@@ -126,7 +132,6 @@ void MainWindow::build()
     process->setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-    //QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
 
     process->start(buildString);
 }
@@ -144,7 +149,6 @@ void MainWindow::prebuild()
     process->setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-    //QObject::connect(process, &QProcess::readyReadStandardError, this, &MainWindow::readyReadStandardError);
 
     process->start(buildString);
 }
@@ -246,4 +250,26 @@ void MainWindow::on_pushButton_clicked()
     auto commandText = ui->plainTextEdit->toPlainText() + "\n";
 
     process->write(commandText.toUtf8());
+}
+
+void MainWindow::on_actionRun_triggered()
+{
+    run();
+}
+
+void MainWindow::on_actionStop_triggered()
+{
+    process->kill();
+}
+
+void MainWindow::on_actionNew_Project_triggered()
+{
+    presenter->newProject();
+}
+
+void MainWindow::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project)
+{
+    this->setWindowTitle(project->name->c_str());
+
+    updateCurrentPath(project->projectWorkingDirectoryPath);
 }

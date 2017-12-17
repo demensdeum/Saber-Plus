@@ -6,13 +6,18 @@
 #include <QFile>
 #include <QProcess>
 
+#include <memory>
+#include "sppresenter.h"
+
+using namespace std;
+
 class QFileSystemModel;
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public SPPresenterDelegate
 {
     Q_OBJECT
 
@@ -41,8 +46,17 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_actionRun_triggered();
+
+    void on_actionStop_triggered();
+
+    void on_actionNew_Project_triggered();
+
+public:
+    void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
+
 private:
-    Ui::MainWindow *ui;
+     Ui::MainWindow *ui;
 
      QFileSystemModel *filesystemModel;
 
@@ -63,6 +77,10 @@ private:
 
      void readyReadStandardOutput();
      void readyReadStandardError();
+
+     void updateCurrentPath(shared_ptr<string> path);
+
+     shared_ptr<SPPresenter> presenter;
 };
 
 #endif // MAINWINDOW_H
