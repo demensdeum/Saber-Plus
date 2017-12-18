@@ -69,8 +69,6 @@ private:
      QProcess *process;
 
      void saveCurrentOpenedSourceFilePath();
-     void prebuild();
-     void build();
      void run();
      void sendCommand();
 

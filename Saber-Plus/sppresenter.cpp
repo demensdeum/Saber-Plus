@@ -56,6 +56,42 @@ void SPPresenter::cleanProject() {
 
 }
 
+void SPPresenter::buildProject() {
+
+    {
+        QString buildString = "cmake -DCMAKE_BUILD_TYPE=Debug .";
+
+        process = make_shared<QProcess>();
+        process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
+        process->setProcessChannelMode(QProcess::MergedChannels);
+
+        //QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
+
+        process->start(buildString);
+        process->waitForFinished();
+    }
+
+    {
+        QString buildString = "make";
+
+        process = make_shared<QProcess>();
+        process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
+        process->setProcessChannelMode(QProcess::MergedChannels);
+
+        //QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
+
+        process->start(buildString);
+        process->waitForFinished();
+    }
+}
+
+void SPPresenter::buildAndRunProject() {
+
+    buildProject();
+    runProcess();
+
+}
+
 void SPPresenter::openProject() {
 
     auto projectFilePath = QFileDialog::getOpenFileName(parentWidget,

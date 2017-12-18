@@ -116,41 +116,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionBuild_triggered()
 {
-    prebuild();
-    build();
-}
-
-void MainWindow::build()
-{
-    QString buildString;
-    buildString = "make";
-
-    processOutput = "";
-
-    process = new QProcess();
-    process->setWorkingDirectory(currentCMakeRootPath);
-    process->setProcessChannelMode(QProcess::MergedChannels);
-
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-
-    process->start(buildString);
-}
-
-void MainWindow::prebuild()
-{
-    QString buildString;
-    buildString = "cmake -DCMAKE_BUILD_TYPE=Debug .";
-
-    processOutput = "";
-
-    process = new QProcess();
-
-    process->setWorkingDirectory(currentCMakeRootPath);
-    process->setProcessChannelMode(QProcess::MergedChannels);
-
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-
-    process->start(buildString);
+    presenter->buildProject();
 }
 
 void MainWindow::on_actionClean_triggered()
@@ -186,9 +152,7 @@ void MainWindow::run()
 
 void MainWindow::on_actionBuild_Run_triggered()
 {
-    prebuild();
-    build();
-    run();
+    presenter->buildAndRunProject();
 }
 
 void MainWindow::on_actionDebug_triggered()
