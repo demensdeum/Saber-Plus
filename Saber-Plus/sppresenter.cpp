@@ -4,15 +4,34 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QString>
+#include <QtDebug>
 
 void SPPresenterDelegate::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project) {
+
+    qDebug() << "Unused SPPresenterDelegate call "<< presenter << " ; " << project->name->c_str();
+
+}
+
+void SPPresenterDelegate::presenterDidGetProcessOutput(SPPresenter *presenter, QString output) {
+
+
+
+}
+
+void SPPresenter::projectServiceDidGetProcessOutput(SPProjectService *projectService, QString processOutput) {
+
+    delegate->presenterDidGetProcessOutput(this, processOutput);
 
 }
 
 SPPresenter::SPPresenter(QWidget *parentWidget, SPPresenterDelegate *delegate) {
 
+    projectService = make_unique<SPProjectService>();
+    projectService->delegate = this;
+
     this->parentWidget = parentWidget;
     this->delegate = delegate;
+
 }
 
 void SPPresenter::showAboutInformation() {
@@ -23,72 +42,19 @@ void SPPresenter::showAboutInformation() {
 
 void SPPresenter::cleanProject() {
 
-    if (project.get() == nullptr)
-    {
-        return;
-    }
-
-    auto projectWorkingDirectoryPath = project->projectWorkingDirectoryPath;
-
-    if (projectWorkingDirectoryPath.get() == nullptr)
-    {
-        return;
-    }
-
-    if (projectWorkingDirectoryPath->length() < 1)
-    {
-        return;
-    }
-
-    auto projectPath = QString(projectWorkingDirectoryPath->c_str());
-
-    QString cmakeFilesPath = projectPath + "/CMakeFiles";
-    QString cmakeInstallFilePath = projectPath + "/cmake_install.cmake";
-    QString cmakeCachePath = projectPath + "/CMakeCache.txt";
-    QString makeFilePath = projectPath + "/Makefile";
-
-    auto projectDirectory = QDir(cmakeFilesPath);
-    projectDirectory.removeRecursively();
-
-    QFile::remove(cmakeInstallFilePath);
-    QFile::remove(cmakeCachePath);
-    QFile::remove(makeFilePath);
+    projectService->clean();
 
 }
 
 void SPPresenter::buildProject() {
 
-    {
-        QString buildString = "cmake -DCMAKE_BUILD_TYPE=Debug .";
+    projectService->build();
 
-        process = make_shared<QProcess>();
-        process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
-        process->setProcessChannelMode(QProcess::MergedChannels);
-
-        //QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-
-        process->start(buildString);
-        process->waitForFinished();
-    }
-
-    {
-        QString buildString = "make";
-
-        process = make_shared<QProcess>();
-        process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
-        process->setProcessChannelMode(QProcess::MergedChannels);
-
-        //QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-
-        process->start(buildString);
-        process->waitForFinished();
-    }
 }
 
 void SPPresenter::buildAndRunProject() {
 
-    buildProject();
-    runProcess();
+    projectService->buildAndRun();
 
 }
 
@@ -106,10 +72,10 @@ void SPPresenter::openProject() {
 
     auto projectFilePathRaw = make_shared<string>(projectFilePath.toUtf8());
 
-    project = make_shared<SPProject>(make_shared<string>("NOT INITIALIZED"), make_shared<string>("NOT INITIALIZED"));
+    auto project = make_shared<SPProject>(make_shared<string>("NOT INITIALIZED"), make_shared<string>("NOT INITIALIZED"));
     project->deserialize(projectFilePathRaw);
 
-    delegate->presenterDidProjectUpdate(this, project);
+    setProject(project);
 }
 
 void SPPresenter::newProject() {
@@ -147,52 +113,21 @@ void SPPresenter::newProject() {
 
 void SPPresenter::runProcess() {
 
-    if (project.get() == nullptr)
-    {
-        return;
-    }
-
-    if (project->projectExecutablePath.get() == nullptr)
-    {
-        auto processFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", QString(project->projectWorkingDirectoryPath->c_str()), "", nullptr, nullptr);
-
-        if (processFilePath.isEmpty())
-        {
-            return;
-        }
-
-        project->projectExecutablePath = make_shared<string>(processFilePath.toUtf8());
-    }
-
-    if (project->projectExecutablePath->length() < 1)
-    {
-        return;
-    }
-
-    process = make_shared<QProcess>();
-    process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
-    process->setProcessChannelMode(QProcess::MergedChannels);
-
-    //QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-
-    process->start(project->projectExecutablePath->c_str());
+    projectService->runProjectExecutable();
 
 }
 
 void SPPresenter::killProcess() {
 
-    if (process.get() == nullptr) {
+    projectService->killProjectExecutable();
 
-        return;
-
-    }
-
-    process->kill();
 }
 
 void SPPresenter::setProject(shared_ptr<SPProject> project) {
 
     this->project = project;
+    this->projectService->project = project;
+
 
     if (delegate) {
 

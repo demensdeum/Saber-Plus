@@ -1,7 +1,6 @@
 #include "spfile.h"
 
-SPFile::SPFile()
-{
+SPFile::SPFile() {
 
 }
 

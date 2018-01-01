@@ -3,9 +3,9 @@
 
 #include <memory>
 #include <QWidget>
-#include <QProcess>
 
 #include "spproject.h"
+#include "spprojectservice.h"
 
 using namespace std;
 
@@ -15,9 +15,10 @@ class SPPresenterDelegate
 {
 public:
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
+    virtual void presenterDidGetProcessOutput(SPPresenter *presenter, QString output);
 };
 
-class SPPresenter: public enable_shared_from_this<SPPresenter>
+class SPPresenter: public enable_shared_from_this<SPPresenter>, public SPProjectServiceDelegate
 {
 
 public:
@@ -46,9 +47,12 @@ public:
 
     SPPresenterDelegate *delegate;
 
+    virtual void projectServiceDidGetProcessOutput(SPProjectService *projectService, QString processOutput);
+
 private:
     shared_ptr<SPProject> project;
     shared_ptr<QProcess> process;
+    unique_ptr<SPProjectService> projectService;
 
 };
 

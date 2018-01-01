@@ -1,7 +1,6 @@
 #include "spdebugger.h"
 
-SPDebugger::SPDebugger()
-{
+SPDebugger::SPDebugger() {
 
 }
 

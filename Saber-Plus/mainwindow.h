@@ -53,7 +53,8 @@ private slots:
     void on_actionNew_Project_triggered();
 
 public:
-    void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
+    virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
+    virtual void presenterDidGetProcessOutput(SPPresenter *presenter, QString output);
 
 private:
      Ui::MainWindow *ui;

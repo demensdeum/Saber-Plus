@@ -10,8 +10,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+    ui(new Ui::MainWindow) {
+
     runFilePath = "";
 
     process = nullptr;
@@ -22,18 +22,20 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
+
     delete ui;
+
 }
 
-void MainWindow::on_actionOpen_CMAKE_Project_triggered()
-{
+void MainWindow::on_actionOpen_CMAKE_Project_triggered() {
+
     presenter->openProject();
+
 }
 
-void MainWindow::updateCurrentPath(shared_ptr<string> path)
-{
+void MainWindow::updateCurrentPath(shared_ptr<string> path) {
+
     if (path->length() < 1) {
 
         return;
@@ -50,20 +52,23 @@ void MainWindow::updateCurrentPath(shared_ptr<string> path)
     ui->treeView->setColumnHidden(1, true);
     ui->treeView->setColumnHidden(2, true);
     ui->treeView->setColumnHidden(3, true);
+
 }
 
-void MainWindow::on_actionQuit_triggered()
-{
+void MainWindow::on_actionQuit_triggered() {
+
     close();
+
 }
 
-void MainWindow::on_actionAbout_triggered()
-{
+void MainWindow::on_actionAbout_triggered() {
+
     presenter->showAboutInformation();
+
 }
 
-void MainWindow::saveCurrentOpenedSourceFilePath()
-{
+void MainWindow::saveCurrentOpenedSourceFilePath() {
+
     if (currentOpenedSourceFilePath.length() > 0) {
 
         QFile outputFile(currentOpenedSourceFilePath);
@@ -76,10 +81,11 @@ void MainWindow::saveCurrentOpenedSourceFilePath()
 
         qDebug() << "Changes to file saved " << currentOpenedSourceFilePath;
     }
+
 }
 
-void MainWindow::on_treeView_clicked(const QModelIndex &index)
-{
+void MainWindow::on_treeView_clicked(const QModelIndex &index) {
+
     qDebug() << "treeViewClicked";
 
     auto filePath = filesystemModel->filePath(index);
@@ -107,25 +113,29 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 
         currentOpenedSourceFilePath = filePath;
     }
+
 }
 
-void MainWindow::on_actionSave_triggered()
-{
+void MainWindow::on_actionSave_triggered() {
+
     saveCurrentOpenedSourceFilePath();
+
 }
 
-void MainWindow::on_actionBuild_triggered()
-{
+void MainWindow::on_actionBuild_triggered() {
+
     presenter->buildProject();
+
 }
 
-void MainWindow::on_actionClean_triggered()
-{
+void MainWindow::on_actionClean_triggered() {
+
     presenter->cleanProject();
+
 }
 
-void MainWindow::readyReadStandardOutput()
-{
+void MainWindow::readyReadStandardOutput() {
+
     auto output = process->readAllStandardOutput();
 
     processOutput += output;
@@ -134,37 +144,43 @@ void MainWindow::readyReadStandardOutput()
 
     auto verticalScrollBar = ui->textBrowser->verticalScrollBar();
     verticalScrollBar->setValue(verticalScrollBar->maximum());
+
 }
 
-void MainWindow::readyReadStandardError()
-{
+void MainWindow::readyReadStandardError() {
+
     auto output = process->readAllStandardError();
 
     processOutput += output;
 
     ui->textBrowser->setText(processOutput);
+
 }
 
-void MainWindow::run()
-{
+void MainWindow::run() {
+
     presenter->runProcess();
+
 }
 
-void MainWindow::on_actionBuild_Run_triggered()
-{
+void MainWindow::on_actionBuild_Run_triggered() {
+
     presenter->buildAndRunProject();
+
 }
 
-void MainWindow::on_actionDebug_triggered()
-{
-    if (runFilePath.length() < 1)
-    {
+void MainWindow::on_actionDebug_triggered() {
+
+    if (runFilePath.length() < 1) {
+
         runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", currentCMakeRootPath, "", nullptr, nullptr);
+
     }
 
-    if (runFilePath.length() < 1)
-    {
+    if (runFilePath.length() < 1) {
+
         return;
+
     }
 
     process = new QProcess();
@@ -174,33 +190,54 @@ void MainWindow::on_actionDebug_triggered()
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
 
     process->start("lldb " + runFilePath);
+
 }
 
-void MainWindow::on_pushButton_clicked()
-{
+void MainWindow::on_pushButton_clicked() {
+
     auto commandText = ui->plainTextEdit->toPlainText() + "\n";
 
     process->write(commandText.toUtf8());
+
 }
 
-void MainWindow::on_actionRun_triggered()
-{
+void MainWindow::on_actionRun_triggered() {
+
     run();
+
 }
 
-void MainWindow::on_actionStop_triggered()
-{
+void MainWindow::on_actionStop_triggered() {
+
     presenter->killProcess();
+
 }
 
-void MainWindow::on_actionNew_Project_triggered()
-{
+void MainWindow::on_actionNew_Project_triggered() {
+
     presenter->newProject();
+
 }
 
-void MainWindow::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project)
-{
+void MainWindow::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project) {
+
+    qDebug() << "presenterDidProjectUpdate call "<< presenter;
+
     this->setWindowTitle(project->name->c_str());
 
     updateCurrentPath(project->projectWorkingDirectoryPath);
+
+}
+
+void MainWindow::presenterDidGetProcessOutput(SPPresenter *presenter, QString output) {
+
+    auto text = ui->textBrowser->toPlainText();
+
+    text += output;
+
+    auto verticalScrollBar = ui->textBrowser->verticalScrollBar();
+
+    ui->textBrowser->setText(text);
+    verticalScrollBar->setValue(verticalScrollBar->maximum());
+
 }

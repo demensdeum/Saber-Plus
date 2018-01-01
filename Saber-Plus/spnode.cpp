@@ -1,7 +1,6 @@
 #include "spnode.h"
 
-SPNode::SPNode()
-{
+SPNode::SPNode() {
 
 }
 

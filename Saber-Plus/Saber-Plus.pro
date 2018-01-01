@@ -22,7 +22,10 @@ SOURCES += main.cpp\
     sppresenter.cpp \
     spproject.cpp \
     spfile.cpp \
-    spserializable.cpp
+    spserializable.cpp \
+    spstate.cpp \
+    spprojectservice.cpp \
+    spforwardstatemachine.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
@@ -32,6 +35,9 @@ HEADERS  += mainwindow.h \
     sppresenter.h \
     spproject.h \
     spfile.h \
-    spserializable.h
+    spserializable.h \
+    spstate.h \
+    spprojectservice.h \
+    spforwardstatemachine.h
 
 FORMS    += mainwindow.ui
