@@ -38,22 +38,24 @@ SPProjectService::SPProjectService(QObject *parent) : QObject(parent)
     process = nullptr;
 }
 
-void SPProjectService::stateChanged(QProcess::ProcessState newState)
-{
+void SPProjectService::stateChanged(QProcess::ProcessState newState) {
 
     if (newState == QProcess::NotRunning) {
 
-        if (process->exitCode() == 0) {
+        if (process->exitCode() == 0 && currentStateMachine.get() != nullptr) {
 
-            currentStateMachine->runNextState();
-
-        }
-        else {
-
-            // handle error
+                currentStateMachine->runNextState();
 
         }
     }
+}
+
+void SPProjectService::readyReadStandardOutput() {
+
+    auto output = process->readAllStandardOutput();
+
+    delegate->projectServiceDidGetProcessOutput(this, output);
+
 }
 
 void SPProjectService::forwardStateMachineDidFinish(shared_ptr<SPForwardStateMachine> forwardStateMachine) {
@@ -70,11 +72,11 @@ void SPProjectService::runProjectExecutable() {
 
 }
 
-void SPProjectService::run() {
+bool SPProjectService::resolveProjectExecutableIfNeeded(shared_ptr<SPProject> project) {
 
     if (project.get() == nullptr)
     {
-        return;
+        return false;
     }
 
     if (project->projectExecutablePath.get() == nullptr)
@@ -83,7 +85,7 @@ void SPProjectService::run() {
 
         if (processFilePath.isEmpty())
         {
-            return;
+            return false;
         }
 
         project->projectExecutablePath = make_shared<string>(processFilePath.toUtf8());
@@ -91,7 +93,18 @@ void SPProjectService::run() {
 
     if (project->projectExecutablePath->length() < 1)
     {
+        return false;
+    }
+
+    return true;
+}
+
+void SPProjectService::run() {
+
+    if (SPProjectService::resolveProjectExecutableIfNeeded(project) == false) {
+
         return;
+
     }
 
     process = new QProcess();
@@ -171,14 +184,6 @@ void SPProjectService::killProjectExecutable() {
     }
 
     process->kill();
-
-}
-
-void SPProjectService::readyReadStandardOutput() {
-
-    auto output = process->readAllStandardOutput();
-
-    delegate->projectServiceDidGetProcessOutput(this, output);
 
 }
 

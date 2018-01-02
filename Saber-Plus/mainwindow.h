@@ -27,30 +27,19 @@ public:
 
 private slots:
     void on_actionOpen_CMAKE_Project_triggered();
-
     void on_actionQuit_triggered();
-
     void on_actionAbout_triggered();
-
     void on_treeView_clicked(const QModelIndex &index);
-
     void on_actionSave_triggered();
-
     void on_actionBuild_triggered();
-
     void on_actionClean_triggered();
-
     void on_actionBuild_Run_triggered();
-
-    void on_actionDebug_triggered();
-
-    void on_pushButton_clicked();
-
-    void on_actionRun_triggered();
-
     void on_actionStop_triggered();
-
     void on_actionNew_Project_triggered();
+    void on_actionStart_triggered();
+    void on_actionRun_2_triggered();
+
+    void on_actionToggle_breakpoint_triggered();
 
 public:
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
@@ -62,19 +51,10 @@ private:
      QFileSystemModel *filesystemModel;
 
      QString currentOpenedSourceFilePath;
-     QString currentCmakeFilePath;
-     QString currentCMakeRootPath;
-     QString runFilePath;
-
-     QString processOutput;
-     QProcess *process;
 
      void saveCurrentOpenedSourceFilePath();
      void run();
      void sendCommand();
-
-     void readyReadStandardOutput();
-     void readyReadStandardError();
 
      void updateCurrentPath(shared_ptr<string> path);
 

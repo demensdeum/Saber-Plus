@@ -7,6 +7,8 @@
 #include "spproject.h"
 #include "spprojectservice.h"
 
+#include "spdebugger.h"
+
 using namespace std;
 
 class SPPresenter;
@@ -18,7 +20,7 @@ public:
     virtual void presenterDidGetProcessOutput(SPPresenter *presenter, QString output);
 };
 
-class SPPresenter: public enable_shared_from_this<SPPresenter>, public SPProjectServiceDelegate
+class SPPresenter: public enable_shared_from_this<SPPresenter>, public SPProjectServiceDelegate, public SPDebuggerDelegate
 {
 
 public:
@@ -35,6 +37,9 @@ public:
     void debugProcess();
     void killProcess();
 
+    void debuggerStart();
+    void debuggerRun();
+
     void saveCurrentFile();
 
     void showAboutInformation();
@@ -43,16 +48,21 @@ public:
 
     void setProject(shared_ptr<SPProject> project);
 
+    void toogleBreakpointForFilePathAtLine(QString filePath, int line);
+
     QWidget *parentWidget;
 
     SPPresenterDelegate *delegate;
 
     virtual void projectServiceDidGetProcessOutput(SPProjectService *projectService, QString processOutput);
 
+    virtual void debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput);
+
 private:
     shared_ptr<SPProject> project;
-    shared_ptr<QProcess> process;
+
     unique_ptr<SPProjectService> projectService;
+    unique_ptr<SPDebugger> debugger;
 
 };
 

@@ -13,6 +13,51 @@ SPProject::SPProject(shared_ptr<string> name, shared_ptr<string> projectWorkingD
 
 }
 
+shared_ptr<SPFile> SPProject::fileAtPath(shared_ptr<string> filePath) {
+
+    auto filePathPointer = filePath.get();
+
+    if (filePathPointer == nullptr) {
+
+        return shared_ptr<SPFile>();
+
+    }
+
+    auto filePathString = *filePathPointer;
+
+    auto isExists = pathToFilesMap.find(filePathString) != pathToFilesMap.end();
+
+    if (isExists) {
+
+        return this->pathToFilesMap[filePathString];
+
+    }
+
+    return shared_ptr<SPFile>();
+
+}
+
+shared_ptr<SPFile> SPProject::makeFileWithPath(shared_ptr<string> filePath) {
+
+    auto filePathPointer = filePath.get();
+
+    if (filePathPointer == nullptr) {
+
+        return shared_ptr<SPFile>();
+
+    }
+
+    auto filePathString = *filePathPointer;
+
+    auto file = make_shared<SPFile>();
+
+    file->path = filePath;
+
+    pathToFilesMap[filePathString] = file;
+
+    return file;
+}
+
 void SPProject::serialize(shared_ptr<string> path) {
 
     QJsonObject dictionary;

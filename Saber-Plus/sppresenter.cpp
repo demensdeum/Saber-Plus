@@ -8,13 +8,19 @@
 
 void SPPresenterDelegate::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project) {
 
-    qDebug() << "Unused SPPresenterDelegate call "<< presenter << " ; " << project->name->c_str();
+    qDebug() << "Unused SPPresenterDelegate presenterDidProjectUpdate call " << presenter << " ; " << project->name->c_str();
 
 }
 
 void SPPresenterDelegate::presenterDidGetProcessOutput(SPPresenter *presenter, QString output) {
 
+    qDebug() << "Unused SPPresenterDelegate presenterDidGetProcessOutput call " << presenter << " ; " << output;
 
+}
+
+void SPPresenter::debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput) {
+
+    delegate->presenterDidGetProcessOutput(this, processOutput);
 
 }
 
@@ -28,6 +34,9 @@ SPPresenter::SPPresenter(QWidget *parentWidget, SPPresenterDelegate *delegate) {
 
     projectService = make_unique<SPProjectService>();
     projectService->delegate = this;
+
+    debugger = make_unique<SPDebugger>();
+    debugger->delegate = this;
 
     this->parentWidget = parentWidget;
     this->delegate = delegate;
@@ -120,6 +129,19 @@ void SPPresenter::runProcess() {
 void SPPresenter::killProcess() {
 
     projectService->killProjectExecutable();
+    debugger->kill();
+
+}
+
+void SPPresenter::debuggerStart() {
+
+    debugger->start();
+
+}
+
+void SPPresenter::debuggerRun() {
+
+    debugger->run();
 
 }
 
@@ -127,11 +149,21 @@ void SPPresenter::setProject(shared_ptr<SPProject> project) {
 
     this->project = project;
     this->projectService->project = project;
-
+    this->debugger->project = project;
 
     if (delegate) {
 
         delegate->presenterDidProjectUpdate(this, project);
 
     }
+}
+
+void SPPresenter::toogleBreakpointForFilePathAtLine(QString filePath, int line) {
+
+    QString projectWorkingDirectoryPath = QString(project->projectWorkingDirectoryPath->c_str());
+
+    QString relativePath = "." + filePath.mid(projectWorkingDirectoryPath.length());
+
+    debugger->toogleBreakpointForFilePathAtLine(relativePath, line);
+
 }

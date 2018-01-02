@@ -76,12 +76,6 @@
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="QTextBrowser" name="textBrowser"/>
-       <widget class="QPlainTextEdit" name="plainTextEdit"/>
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Send Command</string>
-        </property>
-       </widget>
       </widget>
      </widget>
     </item>
@@ -121,15 +115,32 @@
    </widget>
    <widget class="QMenu" name="menuProcess">
     <property name="title">
-     <string>Process</string>
+     <string>P&amp;rocess</string>
     </property>
     <addaction name="actionRun"/>
-    <addaction name="actionDebug"/>
     <addaction name="actionStop"/>
+    <addaction name="separator"/>
+    <addaction name="actionClean_Output"/>
+   </widget>
+   <widget class="QMenu" name="menuDebug">
+    <property name="title">
+     <string>Debu&amp;g</string>
+    </property>
+    <addaction name="actionStart"/>
+    <addaction name="actionRun_2"/>
+    <addaction name="actionInterrupt"/>
+    <addaction name="separator"/>
+    <addaction name="actionStep_Over"/>
+    <addaction name="actionStep_In"/>
+    <addaction name="actionStep_Out"/>
+    <addaction name="actionContinue"/>
+    <addaction name="separator"/>
+    <addaction name="actionToggle_breakpoint"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuBuild"/>
    <addaction name="menuProcess"/>
+   <addaction name="menuDebug"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -183,17 +194,100 @@
   </action>
   <action name="actionRun">
    <property name="text">
-    <string>Run</string>
+    <string>Execute</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+E</string>
    </property>
   </action>
   <action name="actionStop">
    <property name="text">
-    <string>Kill</string>
+    <string>&amp;Kill</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+Q</string>
    </property>
   </action>
   <action name="actionNew_Project">
    <property name="text">
-    <string>New Project</string>
+    <string>&amp;New Project</string>
+   </property>
+  </action>
+  <action name="actionStep_In">
+   <property name="text">
+    <string>Step-In</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+D</string>
+   </property>
+  </action>
+  <action name="actionStep_Out">
+   <property name="text">
+    <string>Step-Out</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+A</string>
+   </property>
+  </action>
+  <action name="actionStep_Over">
+   <property name="text">
+    <string>Step-Over</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+S</string>
+   </property>
+  </action>
+  <action name="actionContinue">
+   <property name="text">
+    <string>Continue</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+Space</string>
+   </property>
+  </action>
+  <action name="actionStart">
+   <property name="text">
+    <string>Start</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+W</string>
+   </property>
+  </action>
+  <action name="actionRun_2">
+   <property name="text">
+    <string>Run</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+R</string>
+   </property>
+  </action>
+  <action name="actionInterrupt">
+   <property name="text">
+    <string>Interrupt</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+C</string>
+   </property>
+  </action>
+  <action name="actionKill">
+   <property name="text">
+    <string>Kill</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+Q</string>
+   </property>
+  </action>
+  <action name="actionClean_Output">
+   <property name="text">
+    <string>Clean Output</string>
+   </property>
+  </action>
+  <action name="actionToggle_breakpoint">
+   <property name="text">
+    <string>Toggle Breakpoint</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+B</string>
    </property>
   </action>
  </widget>

@@ -7,14 +7,11 @@
 #include <QDebug>
 #include <QThread>
 #include <QScrollBar>
+#include <QTextBlock>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
-
-    runFilePath = "";
-
-    process = nullptr;
 
     ui->setupUi(this);
 
@@ -134,29 +131,6 @@ void MainWindow::on_actionClean_triggered() {
 
 }
 
-void MainWindow::readyReadStandardOutput() {
-
-    auto output = process->readAllStandardOutput();
-
-    processOutput += output;
-
-    ui->textBrowser->setText(processOutput);
-
-    auto verticalScrollBar = ui->textBrowser->verticalScrollBar();
-    verticalScrollBar->setValue(verticalScrollBar->maximum());
-
-}
-
-void MainWindow::readyReadStandardError() {
-
-    auto output = process->readAllStandardError();
-
-    processOutput += output;
-
-    ui->textBrowser->setText(processOutput);
-
-}
-
 void MainWindow::run() {
 
     presenter->runProcess();
@@ -166,44 +140,6 @@ void MainWindow::run() {
 void MainWindow::on_actionBuild_Run_triggered() {
 
     presenter->buildAndRunProject();
-
-}
-
-void MainWindow::on_actionDebug_triggered() {
-
-    if (runFilePath.length() < 1) {
-
-        runFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", currentCMakeRootPath, "", nullptr, nullptr);
-
-    }
-
-    if (runFilePath.length() < 1) {
-
-        return;
-
-    }
-
-    process = new QProcess();
-    process->setWorkingDirectory(currentCMakeRootPath);
-    process->setProcessChannelMode(QProcess::MergedChannels);
-
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::readyReadStandardOutput);
-
-    process->start("lldb " + runFilePath);
-
-}
-
-void MainWindow::on_pushButton_clicked() {
-
-    auto commandText = ui->plainTextEdit->toPlainText() + "\n";
-
-    process->write(commandText.toUtf8());
-
-}
-
-void MainWindow::on_actionRun_triggered() {
-
-    run();
 
 }
 
@@ -239,5 +175,27 @@ void MainWindow::presenterDidGetProcessOutput(SPPresenter *presenter, QString ou
 
     ui->textBrowser->setText(text);
     verticalScrollBar->setValue(verticalScrollBar->maximum());
+
+}
+
+void MainWindow::on_actionStart_triggered()
+{
+    presenter->debuggerStart();
+}
+
+void MainWindow::on_actionRun_2_triggered()
+{
+    presenter->debuggerRun();
+}
+
+void MainWindow::on_actionToggle_breakpoint_triggered()
+{
+
+    auto textCursor = ui->textEdit->textCursor();
+
+    auto selectedLine = textCursor.blockNumber() + 1;
+
+    presenter->toogleBreakpointForFilePathAtLine(currentOpenedSourceFilePath, selectedLine);
+    qDebug() << "Set breakpoint for filepath: " << currentOpenedSourceFilePath << "; at line: " << selectedLine;
 
 }

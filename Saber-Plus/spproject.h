@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 #include "spnode.h"
 
@@ -19,7 +20,10 @@ public:
     shared_ptr<string> projectWorkingDirectoryPath;
     shared_ptr<string> projectExecutablePath;
 
-    vector<shared_ptr<SPFile>> files;
+    unordered_map<string, shared_ptr<SPFile>> pathToFilesMap;
+
+    shared_ptr<SPFile> fileAtPath(shared_ptr<string> filePath);
+    shared_ptr<SPFile> makeFileWithPath(shared_ptr<string> filePath);
 
     virtual void serialize(shared_ptr<string> path);
     virtual void deserialize(shared_ptr<string> path);

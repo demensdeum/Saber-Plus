@@ -41,6 +41,8 @@ public:
     virtual void forwardStateMachineDidStartState(shared_ptr<SPForwardStateMachine> forwardStateMachine, shared_ptr<SPState> state);
     virtual void forwardStateMachineDidFinish(shared_ptr<SPForwardStateMachine> forwardStateMachine);
 
+    static bool resolveProjectExecutableIfNeeded(shared_ptr<SPProject> project);
+
 private:
     void premake();
     void make();
