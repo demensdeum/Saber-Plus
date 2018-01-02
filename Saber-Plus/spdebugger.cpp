@@ -43,6 +43,25 @@ void SPDebugger::run() {
 
     }
 
+    for (auto item : project->pathToFilesMap) {
+
+        QString filePath = QString(item.first.c_str());
+
+        QString fileName = filePath.split("/").last();
+
+        auto file = item.second;
+
+        for (auto breakpointItem : file->linesToBreakpointsMap) {
+
+            QString breakpointLine = QString::number(breakpointItem.first);
+
+            QString breakpointCommand = "breakpoint set --file " + fileName + " --line  " + breakpointLine + "\n";
+
+            process->write(breakpointCommand.toUtf8());
+        }
+
+    }
+
     process->write("run\n");
 
 }
