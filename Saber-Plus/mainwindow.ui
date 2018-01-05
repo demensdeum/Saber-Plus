@@ -16,16 +16,60 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_5">
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter_3">
+     <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QSplitter" name="splitter_2">
+      <widget class="QSplitter" name="splitter">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <widget class="QTreeView" name="treeView"/>
-       <widget class="QTabWidget" name="tabWidget">
+       <widget class="QTabWidget" name="toolTabs">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab_5">
+         <attribute name="title">
+          <string>Files</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QTreeView" name="treeView"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_7">
+         <attribute name="title">
+          <string>Search</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="0">
+           <widget class="QListView" name="listView_2"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_6">
+         <attribute name="title">
+          <string>Diagnostics</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="0">
+           <widget class="QListView" name="listView"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>Fix All</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QTabWidget" name="textEditorTabs">
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -33,7 +77,7 @@
          <attribute name="title">
           <string>Tab 1</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
            <widget class="CodeEditor" name="textEdit" native="true"/>
           </item>
@@ -71,12 +115,7 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QSplitter" name="splitter">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <widget class="QTextBrowser" name="textBrowser"/>
-      </widget>
+      <widget class="QTextBrowser" name="output"/>
      </widget>
     </item>
    </layout>
@@ -112,12 +151,14 @@
     <addaction name="actionClean"/>
     <addaction name="actionBuild"/>
     <addaction name="actionBuild_Run"/>
+    <addaction name="separator"/>
+    <addaction name="actionPerform_Diagnostics"/>
    </widget>
    <widget class="QMenu" name="menuProcess">
     <property name="title">
      <string>P&amp;rocess</string>
     </property>
-    <addaction name="actionRun"/>
+    <addaction name="actionRun_3"/>
     <addaction name="actionStop"/>
     <addaction name="separator"/>
     <addaction name="actionClean_Output"/>
@@ -194,7 +235,7 @@
   </action>
   <action name="actionRun">
    <property name="text">
-    <string>Execute</string>
+    <string>&amp;Execute</string>
    </property>
    <property name="shortcut">
     <string>Shift+E</string>
@@ -215,7 +256,7 @@
   </action>
   <action name="actionStep_In">
    <property name="text">
-    <string>Step-In</string>
+    <string>St&amp;ep-In</string>
    </property>
    <property name="shortcut">
     <string>Shift+D</string>
@@ -223,7 +264,7 @@
   </action>
   <action name="actionStep_Out">
    <property name="text">
-    <string>Step-Out</string>
+    <string>Ste&amp;p-Out</string>
    </property>
    <property name="shortcut">
     <string>Shift+A</string>
@@ -231,7 +272,7 @@
   </action>
   <action name="actionStep_Over">
    <property name="text">
-    <string>Step-Over</string>
+    <string>Step-&amp;Over</string>
    </property>
    <property name="shortcut">
     <string>Shift+S</string>
@@ -239,7 +280,7 @@
   </action>
   <action name="actionContinue">
    <property name="text">
-    <string>Continue</string>
+    <string>&amp;Continue</string>
    </property>
    <property name="shortcut">
     <string>Shift+Space</string>
@@ -247,7 +288,7 @@
   </action>
   <action name="actionStart">
    <property name="text">
-    <string>Start</string>
+    <string>&amp;Start</string>
    </property>
    <property name="shortcut">
     <string>Shift+W</string>
@@ -255,7 +296,7 @@
   </action>
   <action name="actionRun_2">
    <property name="text">
-    <string>Run</string>
+    <string>&amp;Run</string>
    </property>
    <property name="shortcut">
     <string>Shift+R</string>
@@ -263,7 +304,7 @@
   </action>
   <action name="actionInterrupt">
    <property name="text">
-    <string>Interrupt</string>
+    <string>&amp;Interrupt</string>
    </property>
    <property name="shortcut">
     <string>Shift+C</string>
@@ -279,15 +320,25 @@
   </action>
   <action name="actionClean_Output">
    <property name="text">
-    <string>Clean Output</string>
+    <string>&amp;Clean Output</string>
    </property>
   </action>
   <action name="actionToggle_breakpoint">
    <property name="text">
-    <string>Toggle Breakpoint</string>
+    <string>&amp;Toggle Breakpoint</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+B</string>
+   </property>
+  </action>
+  <action name="actionRun_3">
+   <property name="text">
+    <string>&amp;Run</string>
+   </property>
+  </action>
+  <action name="actionPerform_Diagnostics">
+   <property name="text">
+    <string>&amp;Perform Diagnostics</string>
    </property>
   </action>
  </widget>

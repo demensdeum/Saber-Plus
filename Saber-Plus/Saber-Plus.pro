@@ -24,8 +24,11 @@ SOURCES += main.cpp\
     spfile.cpp \
     spserializable.cpp \
     spstate.cpp \
-    spprojectservice.cpp \
-    spforwardstatemachine.cpp
+    spforwardstatemachine.cpp \
+    spdiagnosticsservice.cpp \
+    spprojectbuilderservice.cpp \
+    spdiagnosticissue.cpp \
+    spdiagnosticissueslist.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
@@ -37,7 +40,10 @@ HEADERS  += mainwindow.h \
     spfile.h \
     spserializable.h \
     spstate.h \
-    spprojectservice.h \
-    spforwardstatemachine.h
+    spforwardstatemachine.h \
+    spdiagnosticsservice.h \
+    spprojectbuilderservice.h \
+    spdiagnosticissue.h \
+    spdiagnosticissueslist.h
 
 FORMS    += mainwindow.ui

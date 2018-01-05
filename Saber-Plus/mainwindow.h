@@ -38,8 +38,11 @@ private slots:
     void on_actionNew_Project_triggered();
     void on_actionStart_triggered();
     void on_actionRun_2_triggered();
-
     void on_actionToggle_breakpoint_triggered();
+    void on_actionClean_Output_triggered();
+    void on_actionRun_3_triggered();
+
+    void on_actionPerform_Diagnostics_triggered();
 
 public:
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
@@ -53,10 +56,9 @@ private:
      QString currentOpenedSourceFilePath;
 
      void saveCurrentOpenedSourceFilePath();
-     void run();
-     void sendCommand();
-
      void updateCurrentPath(shared_ptr<string> path);
+
+     void cleanOutput();
 
      shared_ptr<SPPresenter> presenter;
 };

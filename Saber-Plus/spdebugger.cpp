@@ -1,6 +1,6 @@
 #include "spdebugger.h"
 
-#include "spprojectservice.h"
+#include "spprojectbuilderservice.h"
 
 #include <QDebug>
 
@@ -16,7 +16,7 @@ SPDebugger::SPDebugger(QObject *parent) : QObject(parent) {
 
 void SPDebugger::start() {
 
-    if (SPProjectService::resolveProjectExecutableIfNeeded(project) == false) {
+    if (SPProjectBuilderService::resolveProjectExecutableIfNeeded(project) == false) {
 
         return;
 

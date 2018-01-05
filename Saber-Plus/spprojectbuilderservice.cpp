@@ -1,4 +1,4 @@
-#include "spprojectservice.h"
+#include "spprojectbuilderservice.h"
 
 #include <QProcess>
 #include <QString>
@@ -7,12 +7,15 @@
 #include <QDebug>
 #include <QFileDialog>
 
-void SPProjectServiceDelegate::projectServiceDidGetProcessOutput(SPProjectService *projectService, QString processOutput)
-{
+void SPProjectBuilderServiceDelegate::projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput) {
 
 }
 
-SPProjectService::SPProjectService(QObject *parent) : QObject(parent)
+void SPProjectBuilderServiceDelegate::projectServiceDidFinishPerformance(SPProjectBuilderService *projectService) {
+
+}
+
+SPProjectBuilderService::SPProjectBuilderService(QObject *parent) : QObject(parent)
 {
 
     {
@@ -35,10 +38,21 @@ SPProjectService::SPProjectService(QObject *parent) : QObject(parent)
         buildRunStateMachine = make_shared<SPForwardStateMachine>(premakeState, this);
     }
 
+    {
+        auto cleanState = make_shared<SPState>(make_shared<string>("clean"));
+        auto premakeState = make_shared<SPState>(make_shared<string>("premake"));
+        auto makeState = make_shared<SPState>(make_shared<string>("make"));
+
+        cleanState->nextState = premakeState;
+        premakeState->nextState = makeState;
+
+        cleanBuildStateMachine = make_shared<SPForwardStateMachine>(cleanState, this);
+    }
+
     process = nullptr;
 }
 
-void SPProjectService::stateChanged(QProcess::ProcessState newState) {
+void SPProjectBuilderService::stateChanged(QProcess::ProcessState newState) {
 
     if (newState == QProcess::NotRunning) {
 
@@ -50,7 +64,7 @@ void SPProjectService::stateChanged(QProcess::ProcessState newState) {
     }
 }
 
-void SPProjectService::readyReadStandardOutput() {
+void SPProjectBuilderService::readyReadStandardOutput() {
 
     auto output = process->readAllStandardOutput();
 
@@ -58,21 +72,23 @@ void SPProjectService::readyReadStandardOutput() {
 
 }
 
-void SPProjectService::forwardStateMachineDidFinish(shared_ptr<SPForwardStateMachine> forwardStateMachine) {
+void SPProjectBuilderService::forwardStateMachineDidFinish(shared_ptr<SPForwardStateMachine> forwardStateMachine) {
 
     qDebug() << "SPProjectService forwardStateMachineDidFinish call";
 
     currentStateMachine.reset();
 
+    delegate->projectServiceDidFinishPerformance(this);
+
 }
 
-void SPProjectService::runProjectExecutable() {
+void SPProjectBuilderService::runProjectExecutable() {
 
     run();
 
 }
 
-bool SPProjectService::resolveProjectExecutableIfNeeded(shared_ptr<SPProject> project) {
+bool SPProjectBuilderService::resolveProjectExecutableIfNeeded(shared_ptr<SPProject> project) {
 
     if (project.get() == nullptr)
     {
@@ -99,9 +115,9 @@ bool SPProjectService::resolveProjectExecutableIfNeeded(shared_ptr<SPProject> pr
     return true;
 }
 
-void SPProjectService::run() {
+void SPProjectBuilderService::run() {
 
-    if (SPProjectService::resolveProjectExecutableIfNeeded(project) == false) {
+    if (SPProjectBuilderService::resolveProjectExecutableIfNeeded(project) == false) {
 
         return;
 
@@ -111,14 +127,14 @@ void SPProjectService::run() {
     process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
     process->setProcessChannelMode(QProcess::MergedChannels);
 
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectService::readyReadStandardOutput);
-    QObject::connect(process, &QProcess::stateChanged, this, &SPProjectService::stateChanged);
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);
+    QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
 
     process->start(project->projectExecutablePath->c_str());
 
 }
 
-void SPProjectService::clean() {
+void SPProjectBuilderService::clean() {
 
     if (project.get() == nullptr) {
 
@@ -154,28 +170,30 @@ void SPProjectService::clean() {
     QFile::remove(cmakeCachePath);
     QFile::remove(makeFilePath);
 
+    currentStateMachine->runNextState();
+
 }
 
-void SPProjectService::runStateMachine(shared_ptr<SPForwardStateMachine> stateMachine) {
+void SPProjectBuilderService::performWithStateMachine(shared_ptr<SPForwardStateMachine> stateMachine) {
 
     currentStateMachine = stateMachine;
     currentStateMachine->reset();
     currentStateMachine->runNextState();
 }
 
-void SPProjectService::build() {
+void SPProjectBuilderService::build() {
 
-    runStateMachine(buildStateMachine);
-
-}
-
-void SPProjectService::buildAndRun() {
-
-    runStateMachine(buildRunStateMachine);
+    performWithStateMachine(buildStateMachine);
 
 }
 
-void SPProjectService::killProjectExecutable() {
+void SPProjectBuilderService::buildAndRun() {
+
+    performWithStateMachine(buildRunStateMachine);
+
+}
+
+void SPProjectBuilderService::killProjectExecutable() {
 
     if (process == nullptr) {
 
@@ -187,7 +205,7 @@ void SPProjectService::killProjectExecutable() {
 
 }
 
-void SPProjectService::premake() {
+void SPProjectBuilderService::premake() {
 
     if (project.get() == nullptr)
     {
@@ -199,15 +217,21 @@ void SPProjectService::premake() {
     process = new QProcess();
     process->setProcessChannelMode(QProcess::MergedChannels);
 
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectService::readyReadStandardOutput);
-    QObject::connect(process, &QProcess::stateChanged, this, &SPProjectService::stateChanged);
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);
+    QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
 
     process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
     process->start(buildString);
 
 }
 
-void SPProjectService::make() {
+void SPProjectBuilderService::cleanAndBuild() {
+
+    performWithStateMachine(cleanBuildStateMachine);
+
+}
+
+void SPProjectBuilderService::make() {
 
     if (project.get() == nullptr)
     {
@@ -219,19 +243,23 @@ void SPProjectService::make() {
     process = new QProcess();
     process->setProcessChannelMode(QProcess::MergedChannels);
 
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectService::readyReadStandardOutput);
-    QObject::connect(process, &QProcess::stateChanged, this, &SPProjectService::stateChanged);
+    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);
+    QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
 
     process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
     process->start(buildString);
 
 }
 
-void SPProjectService::forwardStateMachineDidStartState(shared_ptr<SPForwardStateMachine> forwardStateMachine, shared_ptr<SPState> state) {
+void SPProjectBuilderService::forwardStateMachineDidStartState(shared_ptr<SPForwardStateMachine> forwardStateMachine, shared_ptr<SPState> state) {
 
     qDebug() << "SPProjectService forwardStateMachineDidStartState call" << forwardStateMachine.get() << " ; " << state.get();
 
-    if (state->name->compare("premake") == 0)
+    if (state->name->compare("clean") == 0)
+    {
+        clean();
+    }
+    else if (state->name->compare("premake") == 0)
     {
         premake();
     }

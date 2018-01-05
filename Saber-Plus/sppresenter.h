@@ -5,7 +5,8 @@
 #include <QWidget>
 
 #include "spproject.h"
-#include "spprojectservice.h"
+#include "spprojectbuilderservice.h"
+#include "spdiagnosticsservice.h"
 
 #include "spdebugger.h"
 
@@ -18,9 +19,13 @@ class SPPresenterDelegate
 public:
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
     virtual void presenterDidGetProcessOutput(SPPresenter *presenter, QString output);
+    virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
 };
 
-class SPPresenter: public enable_shared_from_this<SPPresenter>, public SPProjectServiceDelegate, public SPDebuggerDelegate
+class SPPresenter: public enable_shared_from_this<SPPresenter>,
+                    public SPProjectBuilderServiceDelegate,
+                     public SPDebuggerDelegate,
+                      public SPDiagnosticsServiceDelegate
 {
 
 public:
@@ -44,6 +49,8 @@ public:
 
     void showAboutInformation();
 
+    void performDiagnostics();
+
     void exit();
 
     void setProject(shared_ptr<SPProject> project);
@@ -54,14 +61,19 @@ public:
 
     SPPresenterDelegate *delegate;
 
-    virtual void projectServiceDidGetProcessOutput(SPProjectService *projectService, QString processOutput);
+    virtual void projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput);
 
     virtual void debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput);
+
+    virtual void diagnosticsServiceDidGetProcessOutput(SPDiagnosticsService *diagnosticsService, QString processOutput);
+
+    virtual void diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
 
 private:
     shared_ptr<SPProject> project;
 
-    unique_ptr<SPProjectService> projectService;
+    unique_ptr<SPProjectBuilderService> projectService;
+    unique_ptr<SPDiagnosticsService> diagnosticsService;
     unique_ptr<SPDebugger> debugger;
 
 };

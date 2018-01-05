@@ -18,28 +18,54 @@ void SPPresenterDelegate::presenterDidGetProcessOutput(SPPresenter *presenter, Q
 
 }
 
+void SPPresenterDelegate::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
+
+    qDebug() << "Unused SPPresenterDelegate presenterDidFinishDiagnosticsDidFinishWithIssuesList call";
+
+}
+
+void SPPresenter::diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
+
+    delegate->presenterDidFinishDiagnosticsDidFinishWithIssuesList(this, diagnosticIssuesList);
+
+}
+
 void SPPresenter::debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput) {
 
     delegate->presenterDidGetProcessOutput(this, processOutput);
 
 }
 
-void SPPresenter::projectServiceDidGetProcessOutput(SPProjectService *projectService, QString processOutput) {
+void SPPresenter::projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput) {
 
     delegate->presenterDidGetProcessOutput(this, processOutput);
 
 }
 
+void SPPresenter::performDiagnostics() {
+
+    diagnosticsService->performDiagnostics();
+}
+
 SPPresenter::SPPresenter(QWidget *parentWidget, SPPresenterDelegate *delegate) {
 
-    projectService = make_unique<SPProjectService>();
+    projectService = make_unique<SPProjectBuilderService>();
     projectService->delegate = this;
 
     debugger = make_unique<SPDebugger>();
     debugger->delegate = this;
 
+    diagnosticsService = make_unique<SPDiagnosticsService>();
+    diagnosticsService->delegate = this;
+
     this->parentWidget = parentWidget;
     this->delegate = delegate;
+
+}
+
+void SPPresenter::diagnosticsServiceDidGetProcessOutput(SPDiagnosticsService *diagnosticsService, QString processOutput) {
+
+    delegate->presenterDidGetProcessOutput(this, processOutput);
 
 }
 
@@ -147,9 +173,10 @@ void SPPresenter::debuggerRun() {
 
 void SPPresenter::setProject(shared_ptr<SPProject> project) {
 
-    this->project = project;
-    this->projectService->project = project;
-    this->debugger->project = project;
+    project = project;
+    projectService->project = project;
+    debugger->project = project;
+    diagnosticsService->setProject(project);
 
     if (delegate) {
 

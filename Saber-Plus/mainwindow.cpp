@@ -128,12 +128,13 @@ void MainWindow::on_actionBuild_triggered() {
 void MainWindow::on_actionClean_triggered() {
 
     presenter->cleanProject();
+    cleanOutput();
 
 }
 
-void MainWindow::run() {
+void MainWindow::cleanOutput() {
 
-    presenter->runProcess();
+    ui->output->setText("");
 
 }
 
@@ -159,6 +160,8 @@ void MainWindow::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SP
 
     qDebug() << "presenterDidProjectUpdate call "<< presenter;
 
+    cleanOutput();
+
     this->setWindowTitle(project->name->c_str());
 
     updateCurrentPath(project->projectWorkingDirectoryPath);
@@ -167,13 +170,13 @@ void MainWindow::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SP
 
 void MainWindow::presenterDidGetProcessOutput(SPPresenter *presenter, QString output) {
 
-    auto text = ui->textBrowser->toPlainText();
+    auto text = ui->output->toPlainText();
 
     text += output;
 
-    auto verticalScrollBar = ui->textBrowser->verticalScrollBar();
+    auto verticalScrollBar = ui->output->verticalScrollBar();
 
-    ui->textBrowser->setText(text);
+    ui->output->setText(text);
     verticalScrollBar->setValue(verticalScrollBar->maximum());
 
 }
@@ -196,6 +199,23 @@ void MainWindow::on_actionToggle_breakpoint_triggered()
     auto selectedLine = textCursor.blockNumber() + 1;
 
     presenter->toogleBreakpointForFilePathAtLine(currentOpenedSourceFilePath, selectedLine);
+
     qDebug() << "Set breakpoint for filepath: " << currentOpenedSourceFilePath << "; at line: " << selectedLine;
 
+}
+
+void MainWindow::on_actionClean_Output_triggered()
+{
+    cleanOutput();
+}
+
+void MainWindow::on_actionRun_3_triggered()
+{
+    presenter->runProcess();
+}
+
+void MainWindow::on_actionPerform_Diagnostics_triggered()
+{
+    cleanOutput();
+    presenter->performDiagnostics();
 }
