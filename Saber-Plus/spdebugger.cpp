@@ -75,6 +75,7 @@ void SPDebugger::kill() {
     }
 
     process->kill();
+    process->deleteLater();
 
 }
 

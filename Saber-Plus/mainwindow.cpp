@@ -8,6 +8,7 @@
 #include <QThread>
 #include <QScrollBar>
 #include <QTextBlock>
+#include <QStringListModel>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,6 +29,23 @@ MainWindow::~MainWindow() {
 void MainWindow::on_actionOpen_CMAKE_Project_triggered() {
 
     presenter->openProject();
+
+}
+
+void MainWindow::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
+
+    auto stringListModel = new QStringListModel();
+    QStringList stringList;
+
+    for (auto i = 0; i < diagnosticIssuesList->count(); i++) {
+
+        stringList.append(QString(diagnosticIssuesList->issueAt(i)->message->c_str()));
+
+    }
+
+    stringListModel->setStringList(stringList);
+
+    ui->diagnosticsTabListView->setModel(stringListModel);
 
 }
 
@@ -218,4 +236,9 @@ void MainWindow::on_actionPerform_Diagnostics_triggered()
 {
     cleanOutput();
     presenter->performDiagnostics();
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    this->presenter->fixAllDiagnosticIssues();
 }

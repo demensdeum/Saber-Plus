@@ -7,6 +7,7 @@
 #include "spproject.h"
 #include "spprojectbuilderservice.h"
 #include "spdiagnosticsservice.h"
+#include "spdiagnosticissuesfixer.h"
 
 #include "spdebugger.h"
 
@@ -51,6 +52,8 @@ public:
 
     void performDiagnostics();
 
+    void fixAllDiagnosticIssues();
+
     void exit();
 
     void setProject(shared_ptr<SPProject> project);
@@ -75,6 +78,7 @@ private:
     unique_ptr<SPProjectBuilderService> projectService;
     unique_ptr<SPDiagnosticsService> diagnosticsService;
     unique_ptr<SPDebugger> debugger;
+    unique_ptr<SPDiagnosticIssuesFixer> diagnosticIssuesFixer;
 
 };
 

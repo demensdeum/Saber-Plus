@@ -44,7 +44,10 @@ private slots:
 
     void on_actionPerform_Diagnostics_triggered();
 
+    void on_pushButton_clicked();
+
 public:
+    virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
     virtual void presenterDidGetProcessOutput(SPPresenter *presenter, QString output);
 
@@ -61,6 +64,8 @@ private:
      void cleanOutput();
 
      shared_ptr<SPPresenter> presenter;
+
+     shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList;
 };
 
 #endif // MAINWINDOW_H

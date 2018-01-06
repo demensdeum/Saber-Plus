@@ -26,9 +26,9 @@
        </property>
        <widget class="QTabWidget" name="toolTabs">
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
-        <widget class="QWidget" name="tab_5">
+        <widget class="QWidget" name="filesListTab">
          <attribute name="title">
           <string>Files</string>
          </attribute>
@@ -38,7 +38,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_7">
+        <widget class="QWidget" name="searchTab">
          <attribute name="title">
           <string>Search</string>
          </attribute>
@@ -51,13 +51,13 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_6">
+        <widget class="QWidget" name="diagnosticsTab">
          <attribute name="title">
           <string>Diagnostics</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0">
-           <widget class="QListView" name="listView"/>
+           <widget class="QListView" name="diagnosticsTabListView"/>
           </item>
           <item row="1" column="0">
            <widget class="QPushButton" name="pushButton">
@@ -73,7 +73,7 @@
         <property name="currentIndex">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="tab">
+        <widget class="QWidget" name="textEditTab1">
          <attribute name="title">
           <string>Tab 1</string>
          </attribute>
@@ -83,7 +83,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_2">
+        <widget class="QWidget" name="textEditTab2">
          <attribute name="title">
           <string>Tab 2</string>
          </attribute>
@@ -93,7 +93,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_3">
+        <widget class="QWidget" name="textEditTab3">
          <attribute name="title">
           <string>Tab 3</string>
          </attribute>
@@ -103,7 +103,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_4">
+        <widget class="QWidget" name="textEditTab4">
          <attribute name="title">
           <string>Tab 4</string>
          </attribute>

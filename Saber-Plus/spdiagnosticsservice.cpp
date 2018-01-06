@@ -36,7 +36,7 @@ void SPDiagnosticsService::projectServiceDidFinishPerformance(SPProjectBuilderSe
     auto diagnosticIssuesList = make_shared<SPDiagnosticIssuesList>();
 
     {
-        auto regexp = QRegularExpression(".*.cpp:[1-9]*:[1-9]*: warning: .*");
+        auto regexp = QRegularExpression("(.*[a-zA-Z]*.cpp):([1-9]*):([1-9]*): warning: (.*)");
 
         auto matchIterator = regexp.globalMatch(buildOutput);
 
@@ -44,16 +44,24 @@ void SPDiagnosticsService::projectServiceDidFinishPerformance(SPProjectBuilderSe
 
             auto match = matchIterator.next();
 
-            qDebug() << match;
-
             auto diagnosticIssueMessage = make_shared<string>(match.captured().toUtf8());
 
-            auto diagnosticIssue = make_shared<SPDiagnosticIssue>(diagnosticIssueMessage, SPDiagnosticIssueTypeUnusedParameter);
+            auto filePath = make_shared<string>(match.captured(1).toUtf8());
+
+            auto row = atoi(match.captured(2).toUtf8());
+            auto column = atoi(match.captured(3).toUtf8());
+
+            auto diagnosticIssue = make_shared<SPDiagnosticIssue>(diagnosticIssueMessage, filePath, SPDiagnosticIssueTypeUnusedParameter);
+
+            diagnosticIssue->row = row;
+            diagnosticIssue->column = column;
 
             diagnosticIssuesList->add(diagnosticIssue);
 
         }
     }
+
+    this->diagnosticIssuesList = diagnosticIssuesList;
 
     delegate->diagnosticsServiceDidFinishWithIssuesList(this, diagnosticIssuesList);
 

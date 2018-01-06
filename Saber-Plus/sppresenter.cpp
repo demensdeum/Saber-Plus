@@ -58,6 +58,8 @@ SPPresenter::SPPresenter(QWidget *parentWidget, SPPresenterDelegate *delegate) {
     diagnosticsService = make_unique<SPDiagnosticsService>();
     diagnosticsService->delegate = this;
 
+    diagnosticIssuesFixer = make_unique<SPDiagnosticIssuesFixer>();
+
     this->parentWidget = parentWidget;
     this->delegate = delegate;
 
@@ -111,6 +113,13 @@ void SPPresenter::openProject() {
     project->deserialize(projectFilePathRaw);
 
     setProject(project);
+}
+
+
+void SPPresenter::fixAllDiagnosticIssues() {
+
+    diagnosticIssuesFixer->fix(diagnosticsService->diagnosticIssuesList);
+
 }
 
 void SPPresenter::newProject() {

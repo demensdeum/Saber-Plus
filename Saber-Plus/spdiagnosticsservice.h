@@ -33,6 +33,8 @@ public:
 
     SPDiagnosticsServiceDelegate *delegate;
 
+    shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList;
+
 private:
     shared_ptr<SPProject> project;
     unique_ptr<SPProjectBuilderService> projectBuilderService;

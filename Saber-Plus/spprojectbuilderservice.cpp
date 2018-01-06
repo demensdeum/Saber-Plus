@@ -48,8 +48,6 @@ SPProjectBuilderService::SPProjectBuilderService(QObject *parent) : QObject(pare
 
         cleanBuildStateMachine = make_shared<SPForwardStateMachine>(cleanState, this);
     }
-
-    process = nullptr;
 }
 
 void SPProjectBuilderService::stateChanged(QProcess::ProcessState newState) {
@@ -170,8 +168,11 @@ void SPProjectBuilderService::clean() {
     QFile::remove(cmakeCachePath);
     QFile::remove(makeFilePath);
 
-    currentStateMachine->runNextState();
+    if (currentStateMachine != nullptr) {
 
+        currentStateMachine->runNextState();
+
+    }
 }
 
 void SPProjectBuilderService::performWithStateMachine(shared_ptr<SPForwardStateMachine> stateMachine) {
@@ -202,7 +203,7 @@ void SPProjectBuilderService::killProjectExecutable() {
     }
 
     process->kill();
-
+    process->deleteLater();
 }
 
 void SPProjectBuilderService::premake() {

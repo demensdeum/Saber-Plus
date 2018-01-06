@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     spdiagnosticsservice.cpp \
     spprojectbuilderservice.cpp \
     spdiagnosticissue.cpp \
-    spdiagnosticissueslist.cpp
+    spdiagnosticissueslist.cpp \
+    spdiagnosticissuesfixer.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
@@ -44,6 +45,7 @@ HEADERS  += mainwindow.h \
     spdiagnosticsservice.h \
     spprojectbuilderservice.h \
     spdiagnosticissue.h \
-    spdiagnosticissueslist.h
+    spdiagnosticissueslist.h \
+    spdiagnosticissuesfixer.h
 
 FORMS    += mainwindow.ui
