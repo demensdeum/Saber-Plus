@@ -46,6 +46,8 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_diagnosticsTabListView_clicked(const QModelIndex &index);
+
 public:
     virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
@@ -60,6 +62,8 @@ private:
 
      void saveCurrentOpenedSourceFilePath();
      void updateCurrentPath(shared_ptr<string> path);
+
+     void openFile(QString filePath);
 
      void cleanOutput();
 

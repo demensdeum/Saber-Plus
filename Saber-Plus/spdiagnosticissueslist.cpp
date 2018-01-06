@@ -13,6 +13,12 @@ void SPDiagnosticIssuesList::add(shared_ptr<SPDiagnosticIssue> issue) {
 
 shared_ptr<SPDiagnosticIssue> SPDiagnosticIssuesList::issueAt(int index) {
 
+    if (index < 0 || index >= count()) {
+
+        return shared_ptr<SPDiagnosticIssue>();
+
+    }
+
     return issues[index];
 
 }

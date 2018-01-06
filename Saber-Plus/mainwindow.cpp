@@ -34,6 +34,8 @@ void MainWindow::on_actionOpen_CMAKE_Project_triggered() {
 
 void MainWindow::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
 
+    this->diagnosticIssuesList = diagnosticIssuesList;
+
     auto stringListModel = new QStringListModel();
     QStringList stringList;
 
@@ -111,23 +113,29 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index) {
 
         qDebug() << "Source file found";
 
-        if (currentOpenedSourceFilePath.length() > 0) {
-
-            saveCurrentOpenedSourceFilePath();
-        }
-
-        QFile sourceFile(filePath);
-
-        sourceFile.open(QIODevice::ReadOnly);
-
-        auto sourceFileContent = sourceFile.readAll();
-
-        sourceFile.close();
-
-        ui->textEdit->document()->setPlainText(sourceFileContent);
-
-        currentOpenedSourceFilePath = filePath;
+        openFile(filePath);
     }
+
+}
+
+void MainWindow::openFile(QString filePath) {
+
+    if (currentOpenedSourceFilePath.length() > 0) {
+
+        saveCurrentOpenedSourceFilePath();
+    }
+
+    QFile sourceFile(filePath);
+
+    sourceFile.open(QIODevice::ReadOnly);
+
+    auto sourceFileContent = sourceFile.readAll();
+
+    sourceFile.close();
+
+    ui->textEdit->document()->setPlainText(sourceFileContent);
+
+    currentOpenedSourceFilePath = filePath;
 
 }
 
@@ -241,4 +249,31 @@ void MainWindow::on_actionPerform_Diagnostics_triggered()
 void MainWindow::on_pushButton_clicked()
 {
     this->presenter->fixAllDiagnosticIssues();
+}
+
+void MainWindow::on_diagnosticsTabListView_clicked(const QModelIndex &index)
+{
+    auto selectedDiagnosticIssue = diagnosticIssuesList->issueAt(index.row());
+
+    if (selectedDiagnosticIssue.get() == nullptr) {
+
+        return;
+
+    }
+
+    QString filePath(selectedDiagnosticIssue->filePath->c_str());
+
+    openFile(filePath);
+
+    ui->textEdit->moveCursor(QTextCursor::Start);
+
+    if (selectedDiagnosticIssue->row != SPDiagnosticIssueNoNumber) {
+
+        auto textCursor = ui->textEdit->textCursor();
+
+        ui->textEdit->setTextCursor(textCursor);
+        textCursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, selectedDiagnosticIssue->row - 1);
+
+        ui->textEdit->setTextCursor(textCursor);
+    }
 }
