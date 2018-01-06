@@ -14,8 +14,8 @@ class SPProjectBuilderService;
 class SPProjectBuilderServiceDelegate {
 
 public:
-    virtual void projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput);
-    virtual void projectServiceDidFinishPerformance(SPProjectBuilderService *projectService);
+    virtual void projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput);
+    virtual void projectBuilderServiceDidFinishPerformance(SPProjectBuilderService *projectService);
 
 };
 

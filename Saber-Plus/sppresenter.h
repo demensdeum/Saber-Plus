@@ -64,7 +64,7 @@ public:
 
     SPPresenterDelegate *delegate;
 
-    virtual void projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput);
+    virtual void projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectBuilderService, QString processOutput);
 
     virtual void debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput);
 
@@ -75,7 +75,7 @@ public:
 private:
     shared_ptr<SPProject> project;
 
-    unique_ptr<SPProjectBuilderService> projectService;
+    unique_ptr<SPProjectBuilderService> projectBuilderService;
     unique_ptr<SPDiagnosticsService> diagnosticsService;
     unique_ptr<SPDebugger> debugger;
     unique_ptr<SPDiagnosticIssuesFixer> diagnosticIssuesFixer;

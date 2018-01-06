@@ -12,6 +12,8 @@ void SPDebuggerDelegate::debuggerDidGetProcessOutput(SPDebugger *debugger, QStri
 
 SPDebugger::SPDebugger(QObject *parent) : QObject(parent) {
 
+    process = nullptr;
+
 }
 
 void SPDebugger::start() {

@@ -36,7 +36,7 @@ void SPPresenter::debuggerDidGetProcessOutput(SPDebugger *debugger, QString proc
 
 }
 
-void SPPresenter::projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput) {
+void SPPresenter::projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectBuilderService, QString processOutput) {
 
     delegate->presenterDidGetProcessOutput(this, processOutput);
 
@@ -49,8 +49,8 @@ void SPPresenter::performDiagnostics() {
 
 SPPresenter::SPPresenter(QWidget *parentWidget, SPPresenterDelegate *delegate) {
 
-    projectService = make_unique<SPProjectBuilderService>();
-    projectService->delegate = this;
+    projectBuilderService = make_unique<SPProjectBuilderService>();
+    projectBuilderService->delegate = this;
 
     debugger = make_unique<SPDebugger>();
     debugger->delegate = this;
@@ -79,19 +79,19 @@ void SPPresenter::showAboutInformation() {
 
 void SPPresenter::cleanProject() {
 
-    projectService->clean();
+    projectBuilderService->clean();
 
 }
 
 void SPPresenter::buildProject() {
 
-    projectService->build();
+    projectBuilderService->build();
 
 }
 
 void SPPresenter::buildAndRunProject() {
 
-    projectService->buildAndRun();
+    projectBuilderService->buildAndRun();
 
 }
 
@@ -157,13 +157,13 @@ void SPPresenter::newProject() {
 
 void SPPresenter::runProcess() {
 
-    projectService->runProjectExecutable();
+    projectBuilderService->runProjectExecutable();
 
 }
 
 void SPPresenter::killProcess() {
 
-    projectService->killProjectExecutable();
+    projectBuilderService->killProjectExecutable();
     debugger->kill();
 
 }
@@ -183,7 +183,7 @@ void SPPresenter::debuggerRun() {
 void SPPresenter::setProject(shared_ptr<SPProject> project) {
 
     project = project;
-    projectService->project = project;
+    projectBuilderService->project = project;
     debugger->project = project;
     diagnosticsService->setProject(project);
 

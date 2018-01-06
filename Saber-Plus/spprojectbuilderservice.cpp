@@ -7,16 +7,18 @@
 #include <QDebug>
 #include <QFileDialog>
 
-void SPProjectBuilderServiceDelegate::projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput) {
+void SPProjectBuilderServiceDelegate::projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput) {
 
 }
 
-void SPProjectBuilderServiceDelegate::projectServiceDidFinishPerformance(SPProjectBuilderService *projectService) {
+void SPProjectBuilderServiceDelegate::projectBuilderServiceDidFinishPerformance(SPProjectBuilderService *projectService) {
 
 }
 
 SPProjectBuilderService::SPProjectBuilderService(QObject *parent) : QObject(parent)
 {
+
+    process = nullptr;
 
     {
         auto premakeState = make_shared<SPState>(make_shared<string>("premake"));
@@ -66,7 +68,7 @@ void SPProjectBuilderService::readyReadStandardOutput() {
 
     auto output = process->readAllStandardOutput();
 
-    delegate->projectServiceDidGetProcessOutput(this, output);
+    delegate->projectBuilderServiceDidGetProcessOutput(this, output);
 
 }
 
@@ -76,7 +78,7 @@ void SPProjectBuilderService::forwardStateMachineDidFinish(shared_ptr<SPForwardS
 
     currentStateMachine.reset();
 
-    delegate->projectServiceDidFinishPerformance(this);
+    delegate->projectBuilderServiceDidFinishPerformance(this);
 
 }
 
