@@ -29,7 +29,7 @@ private slots:
     void on_actionOpen_CMAKE_Project_triggered();
     void on_actionQuit_triggered();
     void on_actionAbout_triggered();
-    void on_treeView_clicked(const QModelIndex &index);
+    void on_fileBrowser_clicked(const QModelIndex &index);
     void on_actionSave_triggered();
     void on_actionBuild_triggered();
     void on_actionClean_triggered();
@@ -49,6 +49,8 @@ private slots:
     void on_diagnosticsTabListView_clicked(const QModelIndex &index);
 
     void on_textEditSearchLineEdit_returnPressed();
+
+    void on_textSearchLineEdit_returnPressed();
 
 public:
     virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);

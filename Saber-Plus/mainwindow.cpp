@@ -64,11 +64,11 @@ void MainWindow::updateCurrentPath(shared_ptr<string> path) {
     filesystemModel = new QFileSystemModel;
     filesystemModel->setRootPath(filesystemModelPath);
 
-    ui->treeView->setModel(filesystemModel);
-    ui->treeView->setRootIndex(filesystemModel->setRootPath(filesystemModelPath));
-    ui->treeView->setColumnHidden(1, true);
-    ui->treeView->setColumnHidden(2, true);
-    ui->treeView->setColumnHidden(3, true);
+    ui->fileBrowser->setModel(filesystemModel);
+    ui->fileBrowser->setRootIndex(filesystemModel->setRootPath(filesystemModelPath));
+    ui->fileBrowser->setColumnHidden(1, true);
+    ui->fileBrowser->setColumnHidden(2, true);
+    ui->fileBrowser->setColumnHidden(3, true);
 
 }
 
@@ -101,9 +101,9 @@ void MainWindow::saveCurrentOpenedSourceFilePath() {
 
 }
 
-void MainWindow::on_treeView_clicked(const QModelIndex &index) {
+void MainWindow::on_fileBrowser_clicked(const QModelIndex &index) {
 
-    qDebug() << "treeViewClicked";
+    qDebug() << "fileBrowserClicked";
 
     auto filePath = filesystemModel->filePath(index);
 
@@ -304,4 +304,11 @@ void MainWindow::on_textEditSearchLineEdit_returnPressed()
     ui->textEdit->setTextCursor(foundCursor);
 
     qDebug() << "foundCursor";
+}
+
+void MainWindow::on_textSearchLineEdit_returnPressed()
+{
+    auto searchText = ui->textSearchLineEdit->text();
+
+    presenter->searchTextInFiles(searchText);
 }

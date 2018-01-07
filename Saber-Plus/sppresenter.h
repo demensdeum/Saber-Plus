@@ -8,6 +8,7 @@
 #include "spprojectbuilderservice.h"
 #include "spdiagnosticsservice.h"
 #include "spdiagnosticissuesfixer.h"
+#include "sptextsearchinfilesservice.h"
 
 #include "spdebugger.h"
 
@@ -26,7 +27,8 @@ public:
 class SPPresenter: public enable_shared_from_this<SPPresenter>,
                     public SPProjectBuilderServiceDelegate,
                      public SPDebuggerDelegate,
-                      public SPDiagnosticsServiceDelegate
+                      public SPDiagnosticsServiceDelegate,
+                       public SPTextSearchInFilesServiceDelegate
 {
 
 public:
@@ -60,6 +62,8 @@ public:
 
     void toogleBreakpointForFilePathAtLine(QString filePath, int line);
 
+    void searchTextInFiles(QString text);
+
     QWidget *parentWidget;
 
     SPPresenterDelegate *delegate;
@@ -72,6 +76,8 @@ public:
 
     virtual void diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
 
+    virtual void textSearchInFilesServiceDidGetProcessOutput(SPTextSearchInFilesService *textSearchInFilesService, QString output);
+
 private:
     shared_ptr<SPProject> project;
 
@@ -79,6 +85,7 @@ private:
     unique_ptr<SPDiagnosticsService> diagnosticsService;
     unique_ptr<SPDebugger> debugger;
     unique_ptr<SPDiagnosticIssuesFixer> diagnosticIssuesFixer;
+    unique_ptr<SPTextSearchInFilesService> textSearchInFilesService;
 
 };
 

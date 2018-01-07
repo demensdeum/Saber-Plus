@@ -47,6 +47,18 @@ void SPPresenter::performDiagnostics() {
     diagnosticsService->performDiagnostics();
 }
 
+void SPPresenter::searchTextInFiles(QString text) {
+
+    textSearchInFilesService->search(make_shared<string>(text.toUtf8()));
+
+}
+
+void SPPresenter::textSearchInFilesServiceDidGetProcessOutput(SPTextSearchInFilesService *textSearchInFilesService, QString output) {
+
+    delegate->presenterDidGetProcessOutput(this, output);
+
+}
+
 SPPresenter::SPPresenter(QWidget *parentWidget, SPPresenterDelegate *delegate) {
 
     projectBuilderService = make_unique<SPProjectBuilderService>();
@@ -59,6 +71,9 @@ SPPresenter::SPPresenter(QWidget *parentWidget, SPPresenterDelegate *delegate) {
     diagnosticsService->delegate = this;
 
     diagnosticIssuesFixer = make_unique<SPDiagnosticIssuesFixer>();
+
+    textSearchInFilesService = make_unique<SPTextSearchInFilesService>();
+    textSearchInFilesService->delegate = this;
 
     this->parentWidget = parentWidget;
     this->delegate = delegate;
@@ -186,6 +201,7 @@ void SPPresenter::setProject(shared_ptr<SPProject> project) {
     projectBuilderService->project = project;
     debugger->project = project;
     diagnosticsService->setProject(project);
+    textSearchInFilesService->project = project;
 
     if (delegate) {
 
