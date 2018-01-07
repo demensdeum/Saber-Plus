@@ -81,35 +81,8 @@
           <item row="0" column="0">
            <widget class="CodeEditor" name="textEdit" native="true"/>
           </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="textEditTab2">
-         <attribute name="title">
-          <string>Tab 2</string>
-         </attribute>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QTextEdit" name="textEdit_2"/>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="textEditTab3">
-         <attribute name="title">
-          <string>Tab 3</string>
-         </attribute>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QTextEdit" name="textEdit_3"/>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="textEditTab4">
-         <attribute name="title">
-          <string>Tab 4</string>
-         </attribute>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <widget class="QTextEdit" name="textEdit_4"/>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="textEditSearchLineEdit"/>
           </item>
          </layout>
         </widget>

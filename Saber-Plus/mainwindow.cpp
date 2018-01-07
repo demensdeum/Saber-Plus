@@ -277,3 +277,31 @@ void MainWindow::on_diagnosticsTabListView_clicked(const QModelIndex &index)
         ui->textEdit->setTextCursor(textCursor);
     }
 }
+
+void MainWindow::on_textEditSearchLineEdit_returnPressed()
+{
+    qDebug() << "Search text by return button press";
+
+    QString searchString = ui->textEditSearchLineEdit->text();
+    QTextDocument *document = ui->textEdit->document();
+
+    auto cursor = ui->textEdit->textCursor();
+
+    auto foundCursor = document->find(searchString, cursor);
+
+    if (foundCursor.isNull() == true) {
+
+        foundCursor = document->find(searchString);
+
+    }
+
+    if (foundCursor.isNull() == true) {
+
+        return;
+
+    }
+
+    ui->textEdit->setTextCursor(foundCursor);
+
+    qDebug() << "foundCursor";
+}

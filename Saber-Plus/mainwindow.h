@@ -48,6 +48,8 @@ private slots:
 
     void on_diagnosticsTabListView_clicked(const QModelIndex &index);
 
+    void on_textEditSearchLineEdit_returnPressed();
+
 public:
     virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
