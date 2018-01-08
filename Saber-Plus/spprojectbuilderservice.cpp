@@ -212,6 +212,8 @@ void SPProjectBuilderService::killProjectExecutable() {
 
     process->kill();
     process->deleteLater();
+
+    process = nullptr;
 }
 
 void SPProjectBuilderService::premake() {

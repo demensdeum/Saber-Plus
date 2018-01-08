@@ -79,6 +79,7 @@ void SPDebugger::kill() {
     process->kill();
     process->deleteLater();
 
+    process = nullptr;
 }
 
 void SPDebugger::toogleBreakpointForFilePathAtLine(QString filePath, int line) {

@@ -14,9 +14,9 @@
    <string>Saber-Plus</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_5">
+   <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="splitter_3">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -91,7 +91,14 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QTextBrowser" name="output"/>
+      <widget class="QSplitter" name="splitter_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QListView" name="debuggerStackListView"/>
+       <widget class="QTextBrowser" name="output"/>
+       <widget class="QTreeView" name="debuggerVariablesTreeView"/>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -153,6 +160,9 @@
     <addaction name="actionContinue"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_breakpoint"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint_Stack"/>
+    <addaction name="actionPrint_Vairiables"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuBuild"/>
@@ -321,6 +331,16 @@
   <action name="actionPerform_Diagnostics">
    <property name="text">
     <string>&amp;Perform Diagnostics</string>
+   </property>
+  </action>
+  <action name="actionPrint_Stack">
+   <property name="text">
+    <string>Print Stack</string>
+   </property>
+  </action>
+  <action name="actionPrint_Vairiables">
+   <property name="text">
+    <string>Print Vairiables</string>
    </property>
   </action>
  </widget>
