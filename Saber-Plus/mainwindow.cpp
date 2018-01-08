@@ -368,3 +368,21 @@ void MainWindow::on_textSearchListView_clicked(const QModelIndex &index)
         ui->textEdit->setTextCursor(textCursor);
     }
 }
+
+void MainWindow::on_actionPrint_Stack_triggered()
+{
+    presenter->debuggerPrintStack();
+}
+
+void MainWindow::on_actionPrint_Variables_triggered()
+{
+    presenter->debuggerPrintVariables();
+}
+
+void MainWindow::on_debuggerProcessInputLineEdit_returnPressed()
+{
+
+    auto command = make_shared<string>(ui->debuggerProcessInputLineEdit->text().toUtf8());
+
+    presenter->debuggerSendCommand(command);
+}

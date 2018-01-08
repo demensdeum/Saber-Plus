@@ -101,6 +101,9 @@
       </widget>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QLineEdit" name="debuggerProcessInputLineEdit"/>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -162,7 +165,7 @@
     <addaction name="actionToggle_breakpoint"/>
     <addaction name="separator"/>
     <addaction name="actionPrint_Stack"/>
-    <addaction name="actionPrint_Vairiables"/>
+    <addaction name="actionPrint_Variables"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuBuild"/>
@@ -335,12 +338,12 @@
   </action>
   <action name="actionPrint_Stack">
    <property name="text">
-    <string>Print Stack</string>
+    <string>Pri&amp;nt Stack</string>
    </property>
   </action>
-  <action name="actionPrint_Vairiables">
+  <action name="actionPrint_Variables">
    <property name="text">
-    <string>Print Vairiables</string>
+    <string>Print &amp;Variables</string>
    </property>
   </action>
  </widget>

@@ -16,6 +16,49 @@ SPDebugger::SPDebugger(QObject *parent) : QObject(parent) {
 
 }
 
+void SPDebugger::sendCommand(shared_ptr<string> command) {
+
+    if (process == nullptr) {
+
+        return;
+
+    }
+
+    if (command.get() == nullptr) {
+
+        return;
+
+    }
+
+    process->write(command->c_str());
+    process->write("\n");
+
+}
+
+void SPDebugger::printVariables() {
+
+    if (process == nullptr) {
+
+        return;
+
+    }
+
+    process->write("fr var --ptr-depth=0\n");
+
+}
+
+void SPDebugger::printStack() {
+
+    if (process == nullptr) {
+
+        return;
+
+    }
+
+    process->write("thread backtrace\n");
+
+}
+
 void SPDebugger::start() {
 
     if (SPProjectBuilderService::resolveProjectExecutableIfNeeded(project) == false) {

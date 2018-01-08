@@ -55,6 +55,12 @@ private slots:
 
     void on_textSearchListView_clicked(const QModelIndex &index);
 
+    void on_actionPrint_Stack_triggered();
+
+    void on_actionPrint_Variables_triggered();
+
+    void on_debuggerProcessInputLineEdit_returnPressed();
+
 public:
     virtual void presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPresenter *presenter, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList);
     virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList);

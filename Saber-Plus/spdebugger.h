@@ -44,6 +44,16 @@ public:
 
     void toogleBreakpointForFilePathAtLine(QString filePath, int line);
 
+    void printStack();
+    void printVariables();
+
+    // TODO: variables traverse by mouse
+    // print root variables - fr var --ptr-depth=0
+    // print shared_ptr variable member - fr var controller._M_ptr->core --ptr-depth=1
+    // print unique_ptr fr var controller._M_ptr->core._M_t._M_head_impl->camera --ptr-depth=1
+
+    void sendCommand(shared_ptr<string> command);
+
     shared_ptr<SPProject> project;
 
     SPDebuggerDelegate *delegate;

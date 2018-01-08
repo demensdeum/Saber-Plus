@@ -208,9 +208,28 @@ void SPPresenter::debuggerRun() {
 
 }
 
+void SPPresenter::debuggerPrintStack() {
+
+    debugger->printStack();
+
+}
+
+void SPPresenter::debuggerPrintVariables() {
+
+    debugger->printVariables();
+
+}
+
+void SPPresenter::debuggerSendCommand(shared_ptr<string> command) {
+
+    debugger->sendCommand(command);
+
+}
+
 void SPPresenter::setProject(shared_ptr<SPProject> project) {
 
-    project = project;
+    this->project = project;
+
     projectBuilderService->project = project;
     debugger->project = project;
     diagnosticsService->setProject(project);
@@ -225,7 +244,7 @@ void SPPresenter::setProject(shared_ptr<SPProject> project) {
 
 void SPPresenter::toogleBreakpointForFilePathAtLine(QString filePath, int line) {
 
-    QString projectWorkingDirectoryPath = QString(project->projectWorkingDirectoryPath->c_str());
+    QString projectWorkingDirectoryPath = QString(project->projectDirectoryPath->c_str());
 
     QString relativePath = "." + filePath.mid(projectWorkingDirectoryPath.length());
 

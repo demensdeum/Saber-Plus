@@ -48,6 +48,10 @@ public:
 
     void debuggerStart();
     void debuggerRun();
+    void debuggerPrintStack();
+    void debuggerPrintVariables();
+
+    void debuggerSendCommand(shared_ptr<string> command);
 
     void saveCurrentFile();
 
