@@ -32,7 +32,26 @@ void MainWindow::on_actionOpen_CMAKE_Project_triggered() {
 
 }
 
-void MainWindow::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
+void MainWindow::presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPresenter *presenter, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList) {
+
+    this->textSearchInFilesMatchesList = textSearchInFilesMatchesList;
+
+    auto stringListModel = new QStringListModel();
+    QStringList stringList;
+
+    for (auto i = 0; i < textSearchInFilesMatchesList->count(); i++) {
+
+        stringList.append(QString(textSearchInFilesMatchesList->issueAt(i)->message->c_str()));
+
+    }
+
+    stringListModel->setStringList(stringList);
+
+    ui->textSearchListView->setModel(stringListModel);
+
+}
+
+void MainWindow::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
 
     this->diagnosticIssuesList = diagnosticIssuesList;
 
@@ -311,4 +330,31 @@ void MainWindow::on_textSearchLineEdit_returnPressed()
     auto searchText = ui->textSearchLineEdit->text();
 
     presenter->searchTextInFiles(searchText);
+}
+
+void MainWindow::on_textSearchListView_clicked(const QModelIndex &index)
+{
+    auto selectedTextSearchInFilesMatch = textSearchInFilesMatchesList->issueAt(index.row());
+
+    if (selectedTextSearchInFilesMatch.get() == nullptr) {
+
+        return;
+
+    }
+
+    QString filePath(selectedTextSearchInFilesMatch->filePath->c_str());
+
+    openFile(filePath);
+
+    ui->textEdit->moveCursor(QTextCursor::Start);
+
+    if (selectedTextSearchInFilesMatch->row != SPTextSearchInFilesMatchNoNumber) {
+
+        auto textCursor = ui->textEdit->textCursor();
+
+        ui->textEdit->setTextCursor(textCursor);
+        textCursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, selectedTextSearchInFilesMatch->row - 1);
+
+        ui->textEdit->setTextCursor(textCursor);
+    }
 }

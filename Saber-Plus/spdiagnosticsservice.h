@@ -3,7 +3,8 @@
 
 #include <memory>
 #include <spprojectbuilderservice.h>
-#include <spdiagnosticissueslist.h>
+#include <splist.h>
+#include <spdiagnosticissue.h>
 
 #include <QString>
 
@@ -15,7 +16,7 @@ class SPDiagnosticsServiceDelegate {
 
 public:
     virtual void diagnosticsServiceDidGetProcessOutput(SPDiagnosticsService *diagnosticsService, QString processOutput);
-    virtual void diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
+    virtual void diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList);
 
 };
 
@@ -28,12 +29,12 @@ public:
 
     void setProject(shared_ptr<SPProject> project);
 
-    virtual void projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput);
-    virtual void projectServiceDidFinishPerformance(SPProjectBuilderService *projectService);
+    virtual void projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput);
+    virtual void projectBuilderServiceDidFinishPerformance(SPProjectBuilderService *projectService);
 
     SPDiagnosticsServiceDelegate *delegate;
 
-    shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList;
+    shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList;
 
 private:
     shared_ptr<SPProject> project;

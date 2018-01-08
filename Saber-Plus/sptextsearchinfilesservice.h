@@ -5,6 +5,9 @@
 
 #include <QProcess>
 
+#include "sptextsearchinfilesmatch.h"
+#include "splist.h"
+
 class SPTextSearchInFilesService;
 
 class SPTextSearchInFilesServiceDelegate {
@@ -12,7 +15,7 @@ class SPTextSearchInFilesServiceDelegate {
 public:
 
     virtual void textSearchInFilesServiceDidGetProcessOutput(SPTextSearchInFilesService *textSearchInFilesService, QString output);
-    //void textSearchInFilesServiceDidFinishWithSearchMatchesList(SPTextSearchInFilesService *textSearchInFilesService, shared_ptr<SPTextSearchInFilesMatchesList> textSearchInFilesMatchesList);
+    virtual void textSearchInFilesServiceDidFinishWithSearchMatchesList(SPTextSearchInFilesService *textSearchInFilesService, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList);
 
 };
 
@@ -35,6 +38,9 @@ public:
 
 private:
 
+    QString processOutput;
+
+    void stateChanged(QProcess::ProcessState newState);
     void readyReadStandardOutput();
 
 };

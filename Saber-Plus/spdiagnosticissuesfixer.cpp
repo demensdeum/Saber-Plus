@@ -1,11 +1,11 @@
 #include "spdiagnosticissuesfixer.h"
 
 #include <QtDebug>
-#include "spdiagnosticissueslist.h"
+#include "splist.h"
 #include <QFile>
 #include <QRegularExpression>
 
-void SPDiagnosticIssuesFixer::fix(shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
+void SPDiagnosticIssuesFixer::fix(shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
 
     qDebug() << "SPDiagnosticIssuesFixer fix call";
 

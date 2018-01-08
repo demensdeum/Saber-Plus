@@ -8,6 +8,7 @@
 
 #include <memory>
 #include "sppresenter.h"
+#include "splist.h"
 
 using namespace std;
 
@@ -52,8 +53,11 @@ private slots:
 
     void on_textSearchLineEdit_returnPressed();
 
+    void on_textSearchListView_clicked(const QModelIndex &index);
+
 public:
-    virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
+    virtual void presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPresenter *presenter, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList);
+    virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList);
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
     virtual void presenterDidGetProcessOutput(SPPresenter *presenter, QString output);
 
@@ -73,7 +77,8 @@ private:
 
      shared_ptr<SPPresenter> presenter;
 
-     shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList;
+     shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList;
+     shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList;
 };
 
 #endif // MAINWINDOW_H

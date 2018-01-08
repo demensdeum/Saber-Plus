@@ -9,7 +9,7 @@ void SPDiagnosticsServiceDelegate::diagnosticsServiceDidGetProcessOutput(SPDiagn
 
 }
 
-void SPDiagnosticsServiceDelegate::diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
+void SPDiagnosticsServiceDelegate::diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
 
     qDebug() << "SPDiagnosticsServiceDelegate diagnosticsServiceDidFinishWithIssuesList call";
 
@@ -18,10 +18,11 @@ void SPDiagnosticsServiceDelegate::diagnosticsServiceDidFinishWithIssuesList(SPD
 SPDiagnosticsService::SPDiagnosticsService() {
 
     projectBuilderService = make_unique<SPProjectBuilderService>();
+
     projectBuilderService->delegate = this;
 }
 
-void SPDiagnosticsService::projectServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput) {
+void SPDiagnosticsService::projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput) {
 
     buildOutput += processOutput;
 
@@ -29,14 +30,14 @@ void SPDiagnosticsService::projectServiceDidGetProcessOutput(SPProjectBuilderSer
 
 }
 
-void SPDiagnosticsService::projectServiceDidFinishPerformance(SPProjectBuilderService *projectService) {
+void SPDiagnosticsService::projectBuilderServiceDidFinishPerformance(SPProjectBuilderService *projectService) {
 
     qDebug() << "SPDiagnosticsService::projectServiceDidFinishPerformance";
 
-    auto diagnosticIssuesList = make_shared<SPDiagnosticIssuesList>();
+    auto diagnosticIssuesList = make_shared<SPList<SPDiagnosticIssue> >();
 
     {
-        auto regexp = QRegularExpression("(.*[a-zA-Z]*.cpp):([0-9]*):([0-9]*): warning: (.*)");
+        auto regexp = QRegularExpression("(.*[a-zA-Z]*\\.cpp):([0-9]*):([0-9]*): warning: (.*)");
 
         auto matchIterator = regexp.globalMatch(buildOutput);
 
@@ -79,7 +80,5 @@ void SPDiagnosticsService::performDiagnostics() {
     buildOutput = "";
 
     projectBuilderService->cleanAndBuild();
-
-    //TODO: grab compiler output, regexp it and return issues
 
 }

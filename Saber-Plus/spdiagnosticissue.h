@@ -13,7 +13,7 @@ enum SPDiagnosticIssueType {
 
 };
 
-static const int SPDiagnosticIssueNoNumber = 1;
+static const int SPDiagnosticIssueNoNumber = -1;
 
 class SPDiagnosticIssue
 {

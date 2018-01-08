@@ -18,13 +18,19 @@ void SPPresenterDelegate::presenterDidGetProcessOutput(SPPresenter *presenter, Q
 
 }
 
-void SPPresenterDelegate::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
+void SPPresenterDelegate::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
 
     qDebug() << "Unused SPPresenterDelegate presenterDidFinishDiagnosticsDidFinishWithIssuesList call";
 
 }
 
-void SPPresenter::diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList) {
+void SPPresenterDelegate::presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPresenter *presenter, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList) {
+
+    qDebug() << "Unused SPPresenterDelegate presenterDidFinishTextSearchInFilesWithSearchMatchesList call";
+
+}
+
+void SPPresenter::diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
 
     delegate->presenterDidFinishDiagnosticsDidFinishWithIssuesList(this, diagnosticIssuesList);
 
@@ -57,6 +63,13 @@ void SPPresenter::textSearchInFilesServiceDidGetProcessOutput(SPTextSearchInFile
 
     delegate->presenterDidGetProcessOutput(this, output);
 
+}
+
+void SPPresenter::textSearchInFilesServiceDidFinishWithSearchMatchesList(SPTextSearchInFilesService *textSearchInFilesService, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList) {
+
+    qDebug() << "SPPresenter textSearchInFilesServiceDidFinishWithSearchMatchesList";
+
+    delegate->presenterDidFinishTextSearchInFilesWithSearchMatchesList(this, textSearchInFilesMatchesList);
 }
 
 SPPresenter::SPPresenter(QWidget *parentWidget, SPPresenterDelegate *delegate) {

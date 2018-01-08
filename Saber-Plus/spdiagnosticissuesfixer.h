@@ -4,8 +4,7 @@
 #include <memory>
 
 #include "spdiagnosticissue.h"
-
-class SPDiagnosticIssuesList;
+#include "splist.h"
 
 using namespace std;
 
@@ -14,7 +13,7 @@ class SPDiagnosticIssuesFixer
 public:
     SPDiagnosticIssuesFixer();
 
-    void fix(shared_ptr<SPDiagnosticIssuesList> diagnosticIssuesList);
+    void fix(shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList);
 
     void fixUnusedParameterIssue(shared_ptr<SPDiagnosticIssue> diagnosticIssue);
 
