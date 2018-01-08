@@ -97,12 +97,18 @@ bool SPProjectBuilderService::resolveProjectExecutableIfNeeded(shared_ptr<SPProj
 
     if (project->projectExecutablePath.get() == nullptr)
     {
-        auto processFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", QString(project->projectWorkingDirectoryPath->c_str()), "", nullptr, nullptr);
+        auto processFilePath = QFileDialog::getOpenFileName(nullptr, "Select file to run", QString(project->projectDirectoryPath->c_str()), "", nullptr, nullptr);
 
         if (processFilePath.isEmpty())
         {
             return false;
         }
+
+        auto processWorkingDirectoryPathList = processFilePath.split("/");
+        processWorkingDirectoryPathList.removeLast();
+
+        auto processWorkingDirectoryPath = processWorkingDirectoryPathList.join("/");
+        project->projectWorkingDirectoryPath = make_shared<string>(processWorkingDirectoryPath.toUtf8());
 
         project->projectExecutablePath = make_shared<string>(processFilePath.toUtf8());
     }
@@ -142,21 +148,21 @@ void SPProjectBuilderService::clean() {
 
     }
 
-    auto projectWorkingDirectoryPath = project->projectWorkingDirectoryPath;
+    auto projectDirectoryPath = project->projectDirectoryPath;
 
-    if (projectWorkingDirectoryPath.get() == nullptr) {
-
-        return;
-
-    }
-
-    if (projectWorkingDirectoryPath->length() < 1) {
+    if (projectDirectoryPath.get() == nullptr) {
 
         return;
 
     }
 
-    auto projectPath = QString(projectWorkingDirectoryPath->c_str());
+    if (projectDirectoryPath->length() < 1) {
+
+        return;
+
+    }
+
+    auto projectPath = QString(projectDirectoryPath->c_str());
 
     QString cmakeFilesPath = projectPath + "/CMakeFiles";
     QString cmakeInstallFilePath = projectPath + "/cmake_install.cmake";
@@ -223,7 +229,7 @@ void SPProjectBuilderService::premake() {
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);
     QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
 
-    process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
+    process->setWorkingDirectory(QString(project->projectDirectoryPath->c_str()));
     process->start(buildString);
 
 }
@@ -249,7 +255,7 @@ void SPProjectBuilderService::make() {
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);
     QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
 
-    process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
+    process->setWorkingDirectory(QString(project->projectDirectoryPath->c_str()));
     process->start(buildString);
 
 }

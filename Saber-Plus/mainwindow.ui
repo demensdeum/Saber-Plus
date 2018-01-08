@@ -198,10 +198,16 @@
    <property name="text">
     <string>&amp;Build</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
   </action>
   <action name="actionBuild_Run">
    <property name="text">
     <string>Build  and &amp;Run</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
   <action name="actionDebug">

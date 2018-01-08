@@ -17,8 +17,10 @@ public:
     SPProject(shared_ptr<string> name, shared_ptr<string> projectWorkingDirectoryPath);
     SPProject();
 
-    shared_ptr<string> projectWorkingDirectoryPath;
+    shared_ptr<string> projectDirectoryPath;
+
     shared_ptr<string> projectExecutablePath;
+    shared_ptr<string> projectWorkingDirectoryPath;
 
     unordered_map<string, shared_ptr<SPFile>> pathToFilesMap;
 

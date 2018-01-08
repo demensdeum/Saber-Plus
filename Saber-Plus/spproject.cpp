@@ -89,6 +89,6 @@ void SPProject::deserialize(shared_ptr<string> path) {
     auto jsonName = dictionary["name"].toString();
 
     name = make_shared<string>(jsonName.toUtf8());
-    projectWorkingDirectoryPath = make_shared<string>(QFileInfo(QString(path->c_str())).absolutePath().toUtf8());
+    projectDirectoryPath = make_shared<string>(QFileInfo(QString(path->c_str())).absolutePath().toUtf8());
 
 }

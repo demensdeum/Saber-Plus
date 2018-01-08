@@ -219,7 +219,7 @@ void MainWindow::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SP
 
     this->setWindowTitle(project->name->c_str());
 
-    updateCurrentPath(project->projectWorkingDirectoryPath);
+    updateCurrentPath(project->projectDirectoryPath);
 
 }
 
