@@ -67,6 +67,7 @@ private:
      QFileSystemModel *filesystemModel;
 
      QString currentOpenedSourceFilePath;
+     bool currentFileChanged;
 
      void saveCurrentOpenedSourceFilePath();
      void updateCurrentPath(shared_ptr<string> path);
@@ -74,6 +75,8 @@ private:
      void openFile(QString filePath);
 
      void cleanOutput();
+
+     void textChanged();
 
      shared_ptr<SPPresenter> presenter;
 

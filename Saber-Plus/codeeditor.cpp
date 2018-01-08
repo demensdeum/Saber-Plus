@@ -54,6 +54,9 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+
+    auto fontWidth = QFontMetrics(currentCharFormat().font()).averageCharWidth();
+    setTabStopWidth( 3 * fontWidth );
 }
 
 //![constructor]

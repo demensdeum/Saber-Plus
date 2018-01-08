@@ -17,6 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     presenter = make_shared<SPPresenter>(this, this);
+
+    currentFileChanged = false;
+
+    QObject::connect(ui->textEdit, &QPlainTextEdit::textChanged, this, &MainWindow::textChanged);
 }
 
 
@@ -29,6 +33,12 @@ MainWindow::~MainWindow() {
 void MainWindow::on_actionOpen_CMAKE_Project_triggered() {
 
     presenter->openProject();
+
+}
+
+void MainWindow::textChanged() {
+
+    currentFileChanged = true;
 
 }
 
@@ -105,7 +115,7 @@ void MainWindow::on_actionAbout_triggered() {
 
 void MainWindow::saveCurrentOpenedSourceFilePath() {
 
-    if (currentOpenedSourceFilePath.length() > 0) {
+    if (currentOpenedSourceFilePath.length() > 0 && currentFileChanged == true) {
 
         QFile outputFile(currentOpenedSourceFilePath);
         outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -128,23 +138,21 @@ void MainWindow::on_fileBrowser_clicked(const QModelIndex &index) {
 
     qDebug() << filePath;
 
-    if (filePath.contains(".cpp") || filePath.contains(".h") || filePath.contains(".txt") || filePath.endsWith("CMakeLists.txt")) {
-
-        qDebug() << "Source file found";
-
-        openFile(filePath);
-    }
+    openFile(filePath);
 
 }
 
 void MainWindow::openFile(QString filePath) {
 
-    if (currentOpenedSourceFilePath.length() > 0) {
-
-        saveCurrentOpenedSourceFilePath();
-    }
+    saveCurrentOpenedSourceFilePath();
 
     QFile sourceFile(filePath);
+
+    if (sourceFile.size() > 1024 * 512) {
+
+        return;
+
+    }
 
     sourceFile.open(QIODevice::ReadOnly);
 
@@ -155,6 +163,8 @@ void MainWindow::openFile(QString filePath) {
     ui->textEdit->document()->setPlainText(sourceFileContent);
 
     currentOpenedSourceFilePath = filePath;
+
+    currentFileChanged = false;
 
 }
 
