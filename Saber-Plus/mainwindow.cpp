@@ -42,6 +42,32 @@ void MainWindow::textChanged() {
 
 }
 
+void MainWindow::presenterDidGetProcessStackNodes(SPPresenter *presenter, shared_ptr<SPList<SPStackNode> > stackNodesList) {
+
+    this->stackNodesList = stackNodesList;
+
+    auto stringListModel = new QStringListModel();
+    QStringList stringList;
+
+    for (auto i = 0; i < stackNodesList->count(); i++) {
+
+        auto item = stackNodesList->issueAt(i);
+
+        QString itemString = "";
+        itemString += QString(item->filePath->c_str());
+        itemString += ":";
+        itemString += QString::number(item->line);
+
+        stringList.append(itemString);
+
+    }
+
+    stringListModel->setStringList(stringList);
+
+    ui->debuggerStackListView->setModel(stringListModel);
+
+}
+
 void MainWindow::presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPresenter *presenter, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList) {
 
     this->textSearchInFilesMatchesList = textSearchInFilesMatchesList;
@@ -405,4 +431,29 @@ void MainWindow::on_actionStep_Out_triggered()
 void MainWindow::on_actionContinue_triggered()
 {
     presenter->debuggerContinue();
+}
+
+void MainWindow::on_debuggerStackListView_clicked(const QModelIndex &index)
+{
+    auto selectedTextSearchInFilesMatch = stackNodesList->issueAt(index.row());
+
+    if (selectedTextSearchInFilesMatch.get() == nullptr) {
+
+        return;
+
+    }
+
+    QString filePath(selectedTextSearchInFilesMatch->filePath->c_str());
+
+    openFile(filePath);
+
+    ui->textEdit->moveCursor(QTextCursor::Start);
+
+        auto textCursor = ui->textEdit->textCursor();
+
+        ui->textEdit->setTextCursor(textCursor);
+        textCursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, selectedTextSearchInFilesMatch->line - 1);
+
+        ui->textEdit->setTextCursor(textCursor);
+
 }

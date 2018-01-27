@@ -18,6 +18,12 @@ void SPPresenterDelegate::presenterDidGetProcessOutput(SPPresenter *presenter, Q
 
 }
 
+void SPPresenterDelegate::presenterDidGetProcessStackNodes(SPPresenter *presenter, shared_ptr<SPList<SPStackNode> > stackNodesList) {
+
+    qDebug() << "Unused SPPresenterDelegate::presenterDidGetProcessStackNodes call " << presenter << " ; " << stackNodesList.get();
+
+}
+
 void SPPresenterDelegate::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
 
     qDebug() << "Unused SPPresenterDelegate presenterDidFinishDiagnosticsDidFinishWithIssuesList call";
@@ -40,6 +46,11 @@ void SPPresenter::debuggerDidGetProcessOutput(SPDebugger *debugger, QString proc
 
     delegate->presenterDidGetProcessOutput(this, processOutput);
 
+}
+
+void SPPresenter::debuggerDidGetProcessStackNodes(SPDebugger *debugger, shared_ptr<SPList<SPStackNode> > stackNodesList) {
+
+    delegate->presenterDidGetProcessStackNodes(this, stackNodesList);
 }
 
 void SPPresenter::projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectBuilderService, QString processOutput) {
