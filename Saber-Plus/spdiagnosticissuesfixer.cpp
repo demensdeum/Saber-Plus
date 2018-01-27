@@ -17,7 +17,7 @@ void SPDiagnosticIssuesFixer::fix(shared_ptr<SPList<SPDiagnosticIssue> > diagnos
 
     for (auto i = 0; i < diagnosticIssuesList->count(); i++) {
 
-        auto diagnosticIssue = diagnosticIssuesList->issueAt(i);
+        auto diagnosticIssue = diagnosticIssuesList->at(i);
 
         if (diagnosticIssue->type == SPDiagnosticIssueTypeUnusedParameter) {
 

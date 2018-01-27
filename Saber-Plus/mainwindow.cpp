@@ -51,7 +51,7 @@ void MainWindow::presenterDidGetProcessStackNodes(SPPresenter *presenter, shared
 
     for (auto i = 0; i < stackNodesList->count(); i++) {
 
-        auto item = stackNodesList->issueAt(i);
+        auto item = stackNodesList->at(i);
 
         QString itemString = "";
         itemString += QString(item->filePath->c_str());
@@ -77,7 +77,7 @@ void MainWindow::presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPres
 
     for (auto i = 0; i < textSearchInFilesMatchesList->count(); i++) {
 
-        stringList.append(QString(textSearchInFilesMatchesList->issueAt(i)->message->c_str()));
+        stringList.append(QString(textSearchInFilesMatchesList->at(i)->message->c_str()));
 
     }
 
@@ -96,7 +96,7 @@ void MainWindow::presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresente
 
     for (auto i = 0; i < diagnosticIssuesList->count(); i++) {
 
-        stringList.append(QString(diagnosticIssuesList->issueAt(i)->message->c_str()));
+        stringList.append(QString(diagnosticIssuesList->at(i)->message->c_str()));
 
     }
 
@@ -308,7 +308,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_diagnosticsTabListView_clicked(const QModelIndex &index)
 {
-    auto selectedDiagnosticIssue = diagnosticIssuesList->issueAt(index.row());
+    auto selectedDiagnosticIssue = diagnosticIssuesList->at(index.row());
 
     if (selectedDiagnosticIssue.get() == nullptr) {
 
@@ -370,7 +370,7 @@ void MainWindow::on_textSearchLineEdit_returnPressed()
 
 void MainWindow::on_textSearchListView_clicked(const QModelIndex &index)
 {
-    auto selectedTextSearchInFilesMatch = textSearchInFilesMatchesList->issueAt(index.row());
+    auto selectedTextSearchInFilesMatch = textSearchInFilesMatchesList->at(index.row());
 
     if (selectedTextSearchInFilesMatch.get() == nullptr) {
 
@@ -435,7 +435,7 @@ void MainWindow::on_actionContinue_triggered()
 
 void MainWindow::on_debuggerStackListView_clicked(const QModelIndex &index)
 {
-    auto selectedTextSearchInFilesMatch = stackNodesList->issueAt(index.row());
+    auto selectedTextSearchInFilesMatch = stackNodesList->at(index.row());
 
     if (selectedTextSearchInFilesMatch.get() == nullptr) {
 

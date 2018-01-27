@@ -13,11 +13,11 @@ public:
     SPList();
 
     void add(shared_ptr<T> issue);
-    shared_ptr<T> issueAt(int index);
+    shared_ptr<T> at(int index);
     int  count();
 
 private:
-    vector<shared_ptr<T> > issues;
+    vector<shared_ptr<T> > items;
 };
 
 template <class T>
@@ -29,12 +29,12 @@ SPList<T>::SPList()
 template <class T>
 void SPList<T>::add(shared_ptr<T> issue) {
 
-    issues.push_back(issue);
+    items.push_back(issue);
 
 }
 
 template <class T>
-shared_ptr<T> SPList<T>::issueAt(int index) {
+shared_ptr<T> SPList<T>::at(int index) {
 
     if (index < 0 || index >= count()) {
 
@@ -42,14 +42,14 @@ shared_ptr<T> SPList<T>::issueAt(int index) {
 
     }
 
-    return issues[index];
+    return items[index];
 
 }
 
 template <class T>
 int SPList<T>::count() {
 
-    return issues.size();
+    return items.size();
 
 }
 

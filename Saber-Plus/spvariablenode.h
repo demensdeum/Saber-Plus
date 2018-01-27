@@ -9,10 +9,11 @@ using namespace std;
 class SPVariableNode
 {
 public:
-    SPVariableNode();
+    SPVariableNode(shared_ptr<string> classIdentifier, shared_ptr<string> name, shared_ptr<string> value);
 
+    shared_ptr<string> classIdentifier;
     shared_ptr<string> name;
-    shared_ptr<string> description;
+    shared_ptr<string> value;
 };
 
 #endif // SPVARIABLENODE_H

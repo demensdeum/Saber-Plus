@@ -10,6 +10,7 @@
 #include "spbreakpoint.h"
 #include "spproject.h"
 #include "spstacknode.h"
+#include "spvariablenode.h"
 #include <memory>
 
 using namespace std;
@@ -29,6 +30,7 @@ class SPDebuggerDelegate {
 public:
     virtual void debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput);
     virtual void debuggerDidGetProcessStackNodes(SPDebugger *debugger, shared_ptr<SPList<SPStackNode> > stackNodesList);
+    virtual void debuggerDidGetProcessVariableNodes(SPDebugger *debugger, shared_ptr<SPList<SPVariableNode> > variableNodesList);
 
 };
 

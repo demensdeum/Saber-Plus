@@ -17,6 +17,12 @@ void SPDebuggerDelegate::debuggerDidGetProcessStackNodes(SPDebugger *debugger, s
 
 }
 
+void SPDebuggerDelegate::debuggerDidGetProcessVariableNodes(SPDebugger *debugger, shared_ptr<SPList<SPVariableNode> > variableNodesList) {
+
+    qDebug() << "Unused SPDebuggerDelegate debuggerDidGetProcessVariableNodes call " << debugger << " ; " << variableNodesList.get();
+
+}
+
 SPDebugger::SPDebugger(QObject *parent) : QObject(parent) {
 
     process = nullptr;
@@ -52,6 +58,7 @@ void SPDebugger::printVariables() {
 
     process->write("fr var --ptr-depth=0\n");
 
+    state = kSPDebuggerVariablesPrintState;
 }
 
 void SPDebugger::stepIn() {
@@ -248,7 +255,29 @@ void SPDebugger::handleStackPrintOutput(shared_ptr<string> output) {
 
 void SPDebugger::handleVariablesPrintOutput(shared_ptr<string> output) {
 
+    qDebug() << "handleVariablesPrintOutput: " << QString(output->c_str());
 
+    auto outputString = QString(output->c_str());
+
+    auto regexp = QRegularExpression("\(.*\) (.*) = (.*) ");
+
+    auto matchIterator = regexp.globalMatch(outputString);
+
+    auto variableNodesList = make_shared<SPList<SPVariableNode> >();
+
+    while (matchIterator.hasNext()) {
+
+        auto match = matchIterator.next();
+
+        auto classIdentifier = make_shared<string>(match.captured(1).toUtf8());
+        auto name = make_shared<string>(match.captured(2).toUtf8());
+        auto value = make_shared<string>(match.captured(3).toUtf8());
+
+        auto variableNode = make_shared<SPVariableNode>(classIdentifier, name, value);
+        variableNodesList->add(variableNode);
+    }
+
+    delegate->debuggerDidGetProcessVariableNodes(this, variableNodesList);
 }
 
 void SPDebugger::stateChanged(QProcess::ProcessState newState) {
