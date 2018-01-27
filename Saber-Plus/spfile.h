@@ -1,8 +1,6 @@
 #ifndef SPFILE_H
 #define SPFILE_H
 
-#include "spnode.h"
-
 #include <vector>
 #include <memory>
 
@@ -14,10 +12,11 @@
 
 using namespace std;
 
-class SPFile : public SPNode
+class SPFile
 {
 public:
     SPFile();
+
 
     shared_ptr<string> path;
 

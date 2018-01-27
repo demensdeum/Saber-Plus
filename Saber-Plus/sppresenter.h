@@ -51,6 +51,11 @@ public:
     void debuggerPrintStack();
     void debuggerPrintVariables();
 
+    void debuggerStepIn();
+    void debuggerStepOut();
+    void debuggerStepOver();
+    void debuggerContinue();
+
     void debuggerSendCommand(shared_ptr<string> command);
 
     void saveCurrentFile();

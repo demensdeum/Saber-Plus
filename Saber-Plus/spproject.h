@@ -5,17 +5,17 @@
 #include <vector>
 #include <unordered_map>
 
-#include "spnode.h"
-
 #include "spfile.h"
 
 using namespace std;
 
-class SPProject: public SPNode
+class SPProject
 {
 public:
     SPProject(shared_ptr<string> name, shared_ptr<string> projectWorkingDirectoryPath);
     SPProject();
+
+    shared_ptr<string> name;
 
     shared_ptr<string> projectDirectoryPath;
 

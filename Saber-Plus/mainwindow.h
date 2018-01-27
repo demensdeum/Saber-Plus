@@ -61,6 +61,14 @@ private slots:
 
     void on_debuggerProcessInputLineEdit_returnPressed();
 
+    void on_actionStep_Over_triggered();
+
+    void on_actionStep_In_triggered();
+
+    void on_actionStep_Out_triggered();
+
+    void on_actionContinue_triggered();
+
 public:
     virtual void presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPresenter *presenter, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList);
     virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList);

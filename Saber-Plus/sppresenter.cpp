@@ -48,6 +48,30 @@ void SPPresenter::projectBuilderServiceDidGetProcessOutput(SPProjectBuilderServi
 
 }
 
+void SPPresenter::debuggerStepIn() {
+
+    debugger->stepIn();
+
+}
+
+void SPPresenter::debuggerStepOut() {
+
+    debugger->stepOut();
+
+}
+
+void SPPresenter::debuggerStepOver() {
+
+    debugger->stepOver();
+
+}
+
+void SPPresenter::debuggerContinue() {
+
+    debugger->continueProcess();
+
+}
+
 void SPPresenter::performDiagnostics() {
 
     diagnosticsService->performDiagnostics();

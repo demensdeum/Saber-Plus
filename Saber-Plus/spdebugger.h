@@ -6,18 +6,29 @@
 
 #include <QProcess>
 
+#include "splist.h"
 #include "spbreakpoint.h"
-#include "spnode.h"
 #include "spproject.h"
+#include "spstacknode.h"
+#include <memory>
 
 using namespace std;
 
 class SPDebugger;
 
+enum SPDebuggerState {
+
+    kSPDebuggerStackNoneState,
+    kSPDebuggerStackPrintState,
+    kSPDebuggerVariablesPrintState
+
+};
+
 class SPDebuggerDelegate {
 
 public:
     virtual void debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput);
+    virtual void debuggerDidGetProcessStackNodes(SPDebugger *debugger, shared_ptr<SPList<SPStackNode> > stackNodesList);
 
 };
 
@@ -27,6 +38,8 @@ class SPDebugger: public QObject
 
 public:
     explicit SPDebugger(QObject *parent = 0);
+
+    SPDebuggerState state;
 
     void setBreakpoint(shared_ptr<SPBreakpoint> breakpoint);
 
@@ -62,12 +75,11 @@ private:
 
     QProcess *process;
 
-    vector<SPNode> stacktrace();
-    vector<SPNode> variables();
-
     void readyReadStandardOutput();
     void stateChanged(QProcess::ProcessState newState);
 
+    void handleStackPrintOutput(shared_ptr<string> output);
+    void handleVariablesPrintOutput(shared_ptr<string> output);
 };
 
 #endif // SPDEBUGGER_H

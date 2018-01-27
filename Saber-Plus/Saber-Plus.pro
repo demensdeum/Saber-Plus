@@ -17,7 +17,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     spdebugger.cpp \
     spbreakpoint.cpp \
-    spnode.cpp \
     codeeditor.cpp \
     sppresenter.cpp \
     spproject.cpp \
@@ -30,12 +29,13 @@ SOURCES += main.cpp\
     spdiagnosticissue.cpp \
     spdiagnosticissuesfixer.cpp \
     sptextsearchinfilesservice.cpp \
-    sptextsearchinfilesmatch.cpp
+    sptextsearchinfilesmatch.cpp \
+    spstacknode.cpp \
+    spvariablenode.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
     spbreakpoint.h \
-    spnode.h \
     codeeditor.h \
     sppresenter.h \
     spproject.h \
@@ -49,6 +49,8 @@ HEADERS  += mainwindow.h \
     spdiagnosticissuesfixer.h \
     sptextsearchinfilesservice.h \
     splist.h \
-    sptextsearchinfilesmatch.h
+    sptextsearchinfilesmatch.h \
+    spstacknode.h \
+    spvariablenode.h
 
 FORMS    += mainwindow.ui

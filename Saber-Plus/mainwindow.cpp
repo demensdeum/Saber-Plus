@@ -386,3 +386,23 @@ void MainWindow::on_debuggerProcessInputLineEdit_returnPressed()
 
     presenter->debuggerSendCommand(command);
 }
+
+void MainWindow::on_actionStep_Over_triggered()
+{
+    presenter->debuggerStepOver();
+}
+
+void MainWindow::on_actionStep_In_triggered()
+{
+    presenter->debuggerStepIn();
+}
+
+void MainWindow::on_actionStep_Out_triggered()
+{
+    presenter->debuggerStepOut();
+}
+
+void MainWindow::on_actionContinue_triggered()
+{
+    presenter->debuggerContinue();
+}

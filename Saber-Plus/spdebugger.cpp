@@ -3,10 +3,17 @@
 #include "spprojectbuilderservice.h"
 
 #include <QDebug>
+#include <QRegularExpression>
 
 void SPDebuggerDelegate::debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput) {
 
-    qDebug() << "Unused SPDebuggerDelegate debuggerDidGetProcessOutput call "<< debugger << " ; " << processOutput;
+    qDebug() << "Unused SPDebuggerDelegate debuggerDidGetProcessOutput call " << debugger << " ; " << processOutput;
+
+}
+
+void SPDebuggerDelegate::debuggerDidGetProcessStackNodes(SPDebugger *debugger, shared_ptr<SPList<SPStackNode> > stackNodesList) {
+
+    qDebug() << "Unused SPDebuggerDelegate debuggerDidGetProcessStackNodes call " << debugger << " ; " << stackNodesList.get();
 
 }
 
@@ -47,7 +54,37 @@ void SPDebugger::printVariables() {
 
 }
 
+void SPDebugger::stepIn() {
+
+    process->write("thread step-in\n");
+
+    state = kSPDebuggerStackNoneState;
+}
+
+void SPDebugger::stepOut() {
+
+    process->write("thread step-out\n");
+
+    state = kSPDebuggerStackNoneState;
+}
+
+void SPDebugger::stepOver() {
+
+    process->write("thread step-over\n");
+
+    state = kSPDebuggerStackNoneState;
+}
+
+void SPDebugger::continueProcess() {
+
+    process->write("thread continue\n");
+
+    state = kSPDebuggerStackNoneState;
+}
+
 void SPDebugger::printStack() {
+
+    state = kSPDebuggerStackPrintState;
 
     if (process == nullptr) {
 
@@ -160,6 +197,57 @@ void SPDebugger::readyReadStandardOutput() {
     auto output = process->readAllStandardOutput();
 
     delegate->debuggerDidGetProcessOutput(this, output);
+
+    auto outputString = make_shared<string>(output.constData());
+
+    switch (state) {
+
+        case kSPDebuggerStackPrintState:
+
+            handleStackPrintOutput(outputString);
+
+            break;
+
+        case kSPDebuggerVariablesPrintState:
+
+            handleVariablesPrintOutput(outputString);
+
+            break;
+
+        default:
+
+            break;
+    }
+}
+
+void SPDebugger::handleStackPrintOutput(shared_ptr<string> output) {
+
+    qDebug() << "handleStackPrintOutput: " << QString(output->c_str());
+
+    auto outputString = QString(output->c_str());
+
+    auto regexp = QRegularExpression("([a-zA-Z]*\.cpp):([0-9]*)\n");
+
+    auto matchIterator = regexp.globalMatch(outputString);
+
+    auto stackNodesList = make_shared<SPList<SPStackNode> >();
+
+    while (matchIterator.hasNext()) {
+
+        auto match = matchIterator.next();
+
+        auto filePath = make_shared<string>(match.captured(1).toUtf8());
+        auto line = atoi(match.captured(2).toUtf8());
+
+        auto stackNode = make_shared<SPStackNode>(filePath, line);
+        stackNodesList->add(stackNode);
+    }
+
+    delegate->debuggerDidGetProcessStackNodes(this, stackNodesList);
+}
+
+void SPDebugger::handleVariablesPrintOutput(shared_ptr<string> output) {
+
 
 }
 
