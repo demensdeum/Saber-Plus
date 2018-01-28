@@ -36,6 +36,12 @@ void SPPresenterDelegate::presenterDidFinishTextSearchInFilesWithSearchMatchesLi
 
 }
 
+void SPPresenterDelegate::presenterDidGetProcessVariableNodes(SPPresenter *presenter, shared_ptr<SPList<SPVariableNode> > variableNodesList) {
+
+    qDebug() << "Unused SPPresenterDelegate debuggerDidGetProcessVariableNodes call";
+
+}
+
 void SPPresenter::diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
 
     delegate->presenterDidFinishDiagnosticsDidFinishWithIssuesList(this, diagnosticIssuesList);
@@ -51,11 +57,24 @@ void SPPresenter::debuggerDidGetProcessOutput(SPDebugger *debugger, QString proc
 void SPPresenter::debuggerDidGetProcessStackNodes(SPDebugger *debugger, shared_ptr<SPList<SPStackNode> > stackNodesList) {
 
     delegate->presenterDidGetProcessStackNodes(this, stackNodesList);
+
+}
+
+void SPPresenter::debuggerDidGetProcessVariableNodes(SPDebugger *debugger, shared_ptr<SPList<SPVariableNode> > variableNodesList) {
+
+    delegate->presenterDidGetProcessVariableNodes(this, variableNodesList);
+
 }
 
 void SPPresenter::projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectBuilderService, QString processOutput) {
 
     delegate->presenterDidGetProcessOutput(this, processOutput);
+
+}
+
+void SPPresenter::printVariable(shared_ptr<SPVariableNode> variableNode) {
+
+    debugger->printVariable(variableNode);
 
 }
 

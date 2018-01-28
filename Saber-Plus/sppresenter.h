@@ -21,6 +21,7 @@ class SPPresenterDelegate
 public:
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
     virtual void presenterDidGetProcessStackNodes(SPPresenter *presenter, shared_ptr<SPList<SPStackNode> > stackNodesList);
+    virtual void presenterDidGetProcessVariableNodes(SPPresenter *presenter, shared_ptr<SPList<SPVariableNode> > variableNodesList);
     virtual void presenterDidGetProcessOutput(SPPresenter *presenter, QString output);
     virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList);
     virtual void presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPresenter *presenter, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList);
@@ -75,6 +76,8 @@ public:
 
     void searchTextInFiles(QString text);
 
+    void printVariable(shared_ptr<SPVariableNode> variableNode);
+
     QWidget *parentWidget;
 
     SPPresenterDelegate *delegate;
@@ -82,6 +85,7 @@ public:
     virtual void projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectBuilderService, QString processOutput);
 
     virtual void debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput);
+    virtual void debuggerDidGetProcessVariableNodes(SPDebugger *debugger, shared_ptr<SPList<SPVariableNode> > variableNodesList);
     virtual void debuggerDidGetProcessStackNodes(SPDebugger *debugger, shared_ptr<SPList<SPStackNode> > stackNodesList);
 
     virtual void diagnosticsServiceDidGetProcessOutput(SPDiagnosticsService *diagnosticsService, QString processOutput);

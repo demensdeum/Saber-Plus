@@ -42,6 +42,33 @@ void MainWindow::textChanged() {
 
 }
 
+void MainWindow::presenterDidGetProcessVariableNodes(SPPresenter *presenter, shared_ptr<SPList<SPVariableNode> > variableNodesList) {
+
+    this->variableNodesList = variableNodesList;
+
+    auto stringListModel = new QStringListModel();
+    QStringList stringList;
+
+    for (auto i = 0; i < variableNodesList->count(); i++) {
+
+        auto item = variableNodesList->at(i);
+
+        QString itemString = "";
+        itemString += QString(item->classIdentifier->c_str());
+        itemString += " ";
+        itemString += QString(item->name->c_str());
+        itemString += " ";
+        itemString += QString(item->value->c_str());
+
+        stringList.append(itemString);
+
+    }
+
+    stringListModel->setStringList(stringList);
+
+    ui->debuggerVariablesListView->setModel(stringListModel);
+}
+
 void MainWindow::presenterDidGetProcessStackNodes(SPPresenter *presenter, shared_ptr<SPList<SPStackNode> > stackNodesList) {
 
     this->stackNodesList = stackNodesList;
@@ -449,11 +476,24 @@ void MainWindow::on_debuggerStackListView_clicked(const QModelIndex &index)
 
     ui->textEdit->moveCursor(QTextCursor::Start);
 
-        auto textCursor = ui->textEdit->textCursor();
+    auto textCursor = ui->textEdit->textCursor();
 
-        ui->textEdit->setTextCursor(textCursor);
-        textCursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, selectedTextSearchInFilesMatch->line - 1);
+    ui->textEdit->setTextCursor(textCursor);
+    textCursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, selectedTextSearchInFilesMatch->line - 1);
 
-        ui->textEdit->setTextCursor(textCursor);
+    ui->textEdit->setTextCursor(textCursor);
+}
 
+
+void MainWindow::on_debuggerVariablesListView_clicked(const QModelIndex &index)
+{
+    auto selectedVariableNode = this->variableNodesList->at(index.row());
+
+    if (selectedVariableNode.get() == nullptr) {
+
+        return;
+
+    }
+
+    presenter->printVariable(selectedVariableNode);
 }

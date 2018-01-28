@@ -71,7 +71,10 @@ private slots:
 
     void on_debuggerStackListView_clicked(const QModelIndex &index);
 
+    void on_debuggerVariablesListView_clicked(const QModelIndex &index);
+
 public:
+    virtual void presenterDidGetProcessVariableNodes(SPPresenter *presenter, shared_ptr<SPList<SPVariableNode> > variableNodesList);
     virtual void presenterDidGetProcessStackNodes(SPPresenter *presenter, shared_ptr<SPList<SPStackNode> > stackNodesList);
     virtual void presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPresenter *presenter, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList);
     virtual void presenterDidFinishDiagnosticsDidFinishWithIssuesList(SPPresenter *presenter, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList);
@@ -100,6 +103,7 @@ private:
      shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList;
      shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList;
      shared_ptr<SPList<SPStackNode> > stackNodesList;
+     shared_ptr<SPList<SPVariableNode> > variableNodesList;
 };
 
 #endif // MAINWINDOW_H

@@ -21,7 +21,8 @@ enum SPDebuggerState {
 
     kSPDebuggerStackNoneState,
     kSPDebuggerStackPrintState,
-    kSPDebuggerVariablesPrintState
+    kSPDebuggerVariablesPrintState,
+    kSPDebuggerVariablePrintState
 
 };
 
@@ -31,6 +32,7 @@ public:
     virtual void debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput);
     virtual void debuggerDidGetProcessStackNodes(SPDebugger *debugger, shared_ptr<SPList<SPStackNode> > stackNodesList);
     virtual void debuggerDidGetProcessVariableNodes(SPDebugger *debugger, shared_ptr<SPList<SPVariableNode> > variableNodesList);
+    virtual void debbugerDidGetProcessVariableChildNodes(SPDebugger *debugger, shared_ptr<SPVariableNode> variableNode, shared_ptr<SPList<SPVariableNode> > variableNodesList);
 
 };
 
@@ -40,8 +42,6 @@ class SPDebugger: public QObject
 
 public:
     explicit SPDebugger(QObject *parent = 0);
-
-    SPDebuggerState state;
 
     void setBreakpoint(shared_ptr<SPBreakpoint> breakpoint);
 
@@ -62,10 +62,7 @@ public:
     void printStack();
     void printVariables();
 
-    // TODO: variables traverse by mouse
-    // print root variables - fr var --ptr-depth=0
-    // print shared_ptr variable member - fr var controller._M_ptr->core --ptr-depth=1
-    // print unique_ptr fr var controller._M_ptr->core._M_t._M_head_impl->camera --ptr-depth=1
+    void printVariable(shared_ptr<SPVariableNode> variableNode);
 
     void sendCommand(shared_ptr<string> command);
 
@@ -75,12 +72,16 @@ public:
 
 private:
 
+    SPDebuggerState state;
     QProcess *process;
+
+    shared_ptr<SPVariableNode> printVariableNode;
 
     void readyReadStandardOutput();
     void stateChanged(QProcess::ProcessState newState);
 
     void handleStackPrintOutput(shared_ptr<string> output);
+    void handleVariablePrintOutput(shared_ptr<string> output);
     void handleVariablesPrintOutput(shared_ptr<string> output);
 };
 
