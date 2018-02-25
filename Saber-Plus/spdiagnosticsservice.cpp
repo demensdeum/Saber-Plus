@@ -37,7 +37,7 @@ void SPDiagnosticsService::projectBuilderServiceDidFinishPerformance(SPProjectBu
     auto diagnosticIssuesList = make_shared<SPList<SPDiagnosticIssue> >();
 
     {
-        auto regexp = QRegularExpression("(.*[a-zA-Z]*\\.cpp):([0-9]*):([0-9]*): warning: (.*)");
+        auto regexp = QRegularExpression("(.*[a-zA-Z]*\\.cpp):([0-9]*):([0-9]*): ([a-zA-Z]*): (.*)");
 
         auto matchIterator = regexp.globalMatch(buildOutput);
 

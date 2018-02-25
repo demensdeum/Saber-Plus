@@ -54,12 +54,24 @@ SPProjectBuilderService::SPProjectBuilderService(QObject *parent) : QObject(pare
 
 void SPProjectBuilderService::stateChanged(QProcess::ProcessState newState) {
 
+    if (process == nullptr) {
+
+        return;
+
+    }
+
     if (newState == QProcess::NotRunning) {
 
-        if (process->exitCode() == 0 && currentStateMachine.get() != nullptr) {
+        if (currentStateMachine.get() != nullptr) {
+
+            if (process->exitCode() == 0) {
 
                 currentStateMachine->runNextState();
+            }
+            else {
 
+                delegate->projectBuilderServiceDidFinishPerformance(this);
+            }
         }
     }
 }

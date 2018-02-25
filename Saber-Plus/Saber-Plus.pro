@@ -31,7 +31,9 @@ SOURCES += main.cpp\
     sptextsearchinfilesservice.cpp \
     sptextsearchinfilesmatch.cpp \
     spstacknode.cpp \
-    spvariablenode.cpp
+    spvariablenode.cpp \
+    spprojectsymbolsservice.cpp \
+    spprojectsymbol.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
@@ -51,6 +53,8 @@ HEADERS  += mainwindow.h \
     splist.h \
     sptextsearchinfilesmatch.h \
     spstacknode.h \
-    spvariablenode.h
+    spvariablenode.h \
+    spprojectsymbolsservice.h \
+    spprojectsymbol.h
 
 FORMS    += mainwindow.ui
