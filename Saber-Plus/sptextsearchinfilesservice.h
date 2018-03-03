@@ -30,13 +30,13 @@ public:
 
     void search(shared_ptr<string> searchText);
 
-    QProcess process;
-
     shared_ptr<SPProject> project;
 
     SPTextSearchInFilesServiceDelegate *delegate;
 
 private:
+
+    QProcess process;
 
     QString processOutput;
 

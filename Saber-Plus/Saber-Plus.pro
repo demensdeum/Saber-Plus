@@ -26,14 +26,17 @@ SOURCES += main.cpp\
     spforwardstatemachine.cpp \
     spdiagnosticsservice.cpp \
     spprojectbuilderservice.cpp \
-    spdiagnosticissue.cpp \
     spdiagnosticissuesfixer.cpp \
     sptextsearchinfilesservice.cpp \
     sptextsearchinfilesmatch.cpp \
     spstacknode.cpp \
     spvariablenode.cpp \
-    spprojectsymbolsservice.cpp \
-    spprojectsymbol.cpp
+    spprojectsymbol.cpp \
+    spdiagnosticsissuefactory.cpp \
+    spdiagnosticissue.cpp \
+    spprojectclassesservice.cpp \
+    spprojectclass.cpp \
+    spprojectindexer.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
@@ -55,6 +58,12 @@ HEADERS  += mainwindow.h \
     spstacknode.h \
     spvariablenode.h \
     spprojectsymbolsservice.h \
-    spprojectsymbol.h
+    spprojectsymbol.h \
+    spdiagnosticsissuefactory.h \
+    spdiagnosticissuedata.h \
+    spdiagnosticissuedataunusedclass.h \
+    spprojectclassesservice.h \
+    spprojectindexer.h \
+    spclass.h
 
 FORMS    += mainwindow.ui

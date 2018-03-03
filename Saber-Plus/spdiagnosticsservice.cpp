@@ -3,6 +3,8 @@
 #include <QtDebug>
 #include <QRegularExpression>
 
+#include "spdiagnosticsissuefactory.h"
+
 void SPDiagnosticsServiceDelegate::diagnosticsServiceDidGetProcessOutput(SPDiagnosticsService *diagnosticsService, QString processOutput) {
 
     qDebug() << "SPDiagnosticsServiceDelegate diagnosticsServiceDidGetProcessOutput call";
@@ -18,8 +20,8 @@ void SPDiagnosticsServiceDelegate::diagnosticsServiceDidFinishWithIssuesList(SPD
 SPDiagnosticsService::SPDiagnosticsService() {
 
     projectBuilderService = make_unique<SPProjectBuilderService>();
-
     projectBuilderService->delegate = this;
+
 }
 
 void SPDiagnosticsService::projectBuilderServiceDidGetProcessOutput(SPProjectBuilderService *projectService, QString processOutput) {
@@ -52,7 +54,7 @@ void SPDiagnosticsService::projectBuilderServiceDidFinishPerformance(SPProjectBu
             auto row = atoi(match.captured(2).toUtf8());
             auto column = atoi(match.captured(3).toUtf8());
 
-            auto diagnosticIssue = make_shared<SPDiagnosticIssue>(diagnosticIssueMessage, filePath, SPDiagnosticIssueTypeUnusedParameter);
+            auto diagnosticIssue = SPDiagnosticsIssueFactory::issue(diagnosticIssueMessage, filePath);
 
             diagnosticIssue->row = row;
             diagnosticIssue->column = column;

@@ -3,6 +3,8 @@
 #include <QString>
 #include <QRegularExpression>
 
+#include <iostream>
+
 void SPTextSearchInFilesServiceDelegate::textSearchInFilesServiceDidGetProcessOutput(SPTextSearchInFilesService *textSearchInFilesService, QString output) {
 
 
@@ -24,7 +26,9 @@ void SPTextSearchInFilesService::stateChanged(QProcess::ProcessState newState) {
 
         if (process.exitCode() == 0) {
 
-            auto regexp = QRegularExpression("(.*\\.cpp):([0-9]*):(.*)");
+            cout << string(processOutput.toUtf8()) << endl;
+
+            auto regexp = QRegularExpression("(.*\\..*):([0-9]*):(.*)");
 
             auto matchIterator = regexp.globalMatch(processOutput);
 
@@ -34,7 +38,7 @@ void SPTextSearchInFilesService::stateChanged(QProcess::ProcessState newState) {
 
                 auto match = matchIterator.next();
 
-                auto filePathString = QString(project->projectWorkingDirectoryPath->c_str()) + "/" + match.captured(1).toUtf8();
+                auto filePathString = QString(project->projectDirectoryPath->c_str()) + "/" + match.captured(1).toUtf8();
 
                 auto filePath = make_shared<string>(filePathString.toUtf8());
 
@@ -42,11 +46,11 @@ void SPTextSearchInFilesService::stateChanged(QProcess::ProcessState newState) {
 
                 auto matchString = make_shared<string>(match.captured(3).toUtf8());
 
-                auto message = filePathString.split("/").last() + ":" + QString::number(row) + ":" + match.captured(3);
+                auto description = filePathString.split("/").last() + ":" + QString::number(row) + ":" + match.captured(3);
 
-                auto messageString = make_shared<string>(message.toUtf8());
+                auto descriptionString = make_shared<string>(description.toUtf8());
 
-                auto textSearchInFilesMatch = make_shared<SPTextSearchInFilesMatch>(filePath, matchString, messageString);
+                auto textSearchInFilesMatch = make_shared<SPTextSearchInFilesMatch>(filePath, matchString, descriptionString);
                 textSearchInFilesMatch->row = row;
 
                 textSearchInFilesMatchesList->add(textSearchInFilesMatch);
@@ -82,13 +86,17 @@ void SPTextSearchInFilesService::search(shared_ptr<string> searchText) {
 
     }
 
-    process.setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
+    cout << project->projectDirectoryPath->c_str() << endl;
+
+    process.setWorkingDirectory(QString(project->projectDirectoryPath->c_str()));
     process.setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(&process, &QProcess::readyReadStandardOutput, this, &SPTextSearchInFilesService::readyReadStandardOutput);
     QObject::connect(&process, &QProcess::stateChanged, this, &SPTextSearchInFilesService::stateChanged);
 
     QString grepString = "grep -I --include=*.cpp --include=*.h --ignore-case --line-number --exclude-dir=.* --exclude-dir=CMakeFiles -r \"" + QString(searchText->c_str()) + "\"";
+
+    cout << string(grepString.toUtf8()) << endl;
 
     process.start(grepString);
 

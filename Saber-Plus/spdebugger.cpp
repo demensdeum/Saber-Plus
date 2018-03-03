@@ -118,7 +118,7 @@ void SPDebugger::start() {
     }
 
     process = new QProcess();
-    process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
+    process->setWorkingDirectory(QString(project->projectProcessWorkingDirectoryPath->c_str()));
     process->setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPDebugger::readyReadStandardOutput);

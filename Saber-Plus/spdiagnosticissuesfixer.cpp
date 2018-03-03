@@ -4,8 +4,18 @@
 #include "splist.h"
 #include <QFile>
 #include <QRegularExpression>
+#include <iostream>
+
+#include "spdiagnosticissuedataunusedclass.h"
 
 void SPDiagnosticIssuesFixer::fix(shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
+
+    this->diagnosticIssuesList = diagnosticIssuesList;
+
+    projectIndexer->index();
+}
+
+void SPDiagnosticIssuesFixer::projectIndexerDidFinishIndexing(SPProjectIndexer *projectIndexer) {
 
     qDebug() << "SPDiagnosticIssuesFixer fix call";
 
@@ -19,14 +29,64 @@ void SPDiagnosticIssuesFixer::fix(shared_ptr<SPList<SPDiagnosticIssue> > diagnos
 
         auto diagnosticIssue = diagnosticIssuesList->at(i);
 
-        if (diagnosticIssue->type == SPDiagnosticIssueTypeUnusedParameter) {
+        switch (diagnosticIssue->type) {
 
-            qDebug() << "SPDiagnosticIssuesFixer: fix issue with unused parameter type";
+        case SPDiagnosticIssueTypeUnusedParameter:
 
             fixUnusedParameterIssue(diagnosticIssue);
 
+            break;
+
+        case SPDiagnosticIssueTypeUnusedClass:
+
+            fixUnusedClassIssue(diagnosticIssue);
+
+            break;
+
+        default:
+            break;
         }
     }
+}
+
+// TODO: move it to other classes
+
+void SPDiagnosticIssuesFixer::fixUnusedClassIssue(shared_ptr<SPDiagnosticIssue> diagnosticIssue) {
+
+    if (diagnosticIssue->data.get() == nullptr)
+    {
+        return;
+    }
+
+    shared_ptr<SPDiagnosticIssueDataUnusedClass> unusedClassData = std::static_pointer_cast<SPDiagnosticIssueDataUnusedClass>(diagnosticIssue->data);
+
+    auto unusedClassName = unusedClassData->unusedClassName;
+
+    if (unusedClassName.get() == nullptr)
+    {
+        return;
+    }
+
+    auto filePath = diagnosticIssue->filePath;
+
+    if (filePath.get() == nullptr)
+    {
+        return;
+    }
+
+    auto unusedClassNameFile = projectIndexer->fileFromClassName(unusedClassName);
+
+    cout << "Need to add this file path include to header:" << endl;
+    cout << unusedClassNameFile->path->c_str() << endl;
+
+}
+
+void SPDiagnosticIssuesFixer::setProject(shared_ptr<SPProject> project) {
+
+    this->project = project;
+
+    projectIndexer->project = project;
+
 }
 
 void SPDiagnosticIssuesFixer::fixUnusedParameterIssue(shared_ptr<SPDiagnosticIssue> diagnosticIssue) {
@@ -110,5 +170,8 @@ void SPDiagnosticIssuesFixer::fixUnusedParameterIssue(shared_ptr<SPDiagnosticIss
 }
 
 SPDiagnosticIssuesFixer::SPDiagnosticIssuesFixer() {
+
+    projectIndexer = make_unique<SPProjectIndexer>();
+    projectIndexer->delegate = this;
 
 }

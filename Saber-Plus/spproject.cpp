@@ -9,7 +9,7 @@
 SPProject::SPProject(shared_ptr<string> name, shared_ptr<string> projectWorkingDirectoryPath) {
 
     this->name = name;
-    this->projectWorkingDirectoryPath = projectWorkingDirectoryPath;
+    this->projectProcessWorkingDirectoryPath = projectWorkingDirectoryPath;
 
 }
 

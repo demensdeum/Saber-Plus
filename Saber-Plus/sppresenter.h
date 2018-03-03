@@ -9,6 +9,7 @@
 #include "spdiagnosticsservice.h"
 #include "spdiagnosticissuesfixer.h"
 #include "sptextsearchinfilesservice.h"
+#include "spdiagnosticissuedata.h"
 
 #include "spdebugger.h"
 

@@ -11,14 +11,14 @@ static const int SPTextSearchInFilesMatchNoNumber = -1;
 class SPTextSearchInFilesMatch
 {
 public:
-    SPTextSearchInFilesMatch(shared_ptr<string> filePath, shared_ptr<string> match, shared_ptr<string> message);
+    SPTextSearchInFilesMatch(shared_ptr<string> filePath, shared_ptr<string> match, shared_ptr<string> description);
 
     int row;
 
     shared_ptr<string> filePath;
     shared_ptr<string> match;
 
-    shared_ptr<string> message;
+    shared_ptr<string> description;
 
 };
 

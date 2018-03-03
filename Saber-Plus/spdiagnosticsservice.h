@@ -5,6 +5,7 @@
 #include <spprojectbuilderservice.h>
 #include <splist.h>
 #include <spdiagnosticissue.h>
+#include <spdiagnosticissuedata.h>
 
 #include <QString>
 

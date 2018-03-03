@@ -120,7 +120,7 @@ bool SPProjectBuilderService::resolveProjectExecutableIfNeeded(shared_ptr<SPProj
         processWorkingDirectoryPathList.removeLast();
 
         auto processWorkingDirectoryPath = processWorkingDirectoryPathList.join("/");
-        project->projectWorkingDirectoryPath = make_shared<string>(processWorkingDirectoryPath.toUtf8());
+        project->projectProcessWorkingDirectoryPath = make_shared<string>(processWorkingDirectoryPath.toUtf8());
 
         project->projectExecutablePath = make_shared<string>(processFilePath.toUtf8());
     }
@@ -142,7 +142,7 @@ void SPProjectBuilderService::run() {
     }
 
     process = new QProcess();
-    process->setWorkingDirectory(QString(project->projectWorkingDirectoryPath->c_str()));
+    process->setWorkingDirectory(QString(project->projectProcessWorkingDirectoryPath->c_str()));
     process->setProcessChannelMode(QProcess::MergedChannels);
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);

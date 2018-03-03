@@ -288,6 +288,7 @@ void SPPresenter::setProject(shared_ptr<SPProject> project) {
     debugger->project = project;
     diagnosticsService->setProject(project);
     textSearchInFilesService->project = project;
+    diagnosticIssuesFixer->setProject(project);
 
     if (delegate) {
 

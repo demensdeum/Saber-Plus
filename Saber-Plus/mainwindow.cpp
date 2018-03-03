@@ -104,7 +104,7 @@ void MainWindow::presenterDidFinishTextSearchInFilesWithSearchMatchesList(SPPres
 
     for (auto i = 0; i < textSearchInFilesMatchesList->count(); i++) {
 
-        stringList.append(QString(textSearchInFilesMatchesList->at(i)->message->c_str()));
+        stringList.append(QString(textSearchInFilesMatchesList->at(i)->description->c_str()));
 
     }
 

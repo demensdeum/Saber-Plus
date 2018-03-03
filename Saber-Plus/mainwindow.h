@@ -10,6 +10,8 @@
 #include "sppresenter.h"
 #include "splist.h"
 
+#include "spdiagnosticissuedata.h"
+
 using namespace std;
 
 class QFileSystemModel;

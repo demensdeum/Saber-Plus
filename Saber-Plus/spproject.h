@@ -12,7 +12,7 @@ using namespace std;
 class SPProject
 {
 public:
-    SPProject(shared_ptr<string> name, shared_ptr<string> projectWorkingDirectoryPath);
+    SPProject(shared_ptr<string> name, shared_ptr<string> projectProcessWorkingDirectoryPath);
     SPProject();
 
     shared_ptr<string> name;
@@ -20,7 +20,7 @@ public:
     shared_ptr<string> projectDirectoryPath;
 
     shared_ptr<string> projectExecutablePath;
-    shared_ptr<string> projectWorkingDirectoryPath;
+    shared_ptr<string> projectProcessWorkingDirectoryPath;
 
     unordered_map<string, shared_ptr<SPFile>> pathToFilesMap;
 
