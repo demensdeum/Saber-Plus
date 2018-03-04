@@ -6,6 +6,10 @@
 #include <QString>
 #include <QtDebug>
 
+#include <iostream>
+
+using namespace std;
+
 void SPPresenterDelegate::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project) {
 
     qDebug() << "Unused SPPresenterDelegate presenterDidProjectUpdate call " << presenter << " ; " << project->name->c_str();
@@ -280,6 +284,69 @@ void SPPresenter::debuggerSendCommand(shared_ptr<string> command) {
 
 }
 
+void SPPresenter::deletePath(QString filePath) {
+
+    if (filePath.isEmpty()) {
+
+        return;
+
+    }
+
+    auto confirm = QMessageBox::question(parentWidget, "Delete", "Are you sure you want to delete?", QMessageBox::Yes|QMessageBox::Cancel);
+
+    switch (confirm)
+    {
+
+    case QMessageBox::Yes: {
+
+        auto directory = QDir(filePath);
+
+        if (directory.exists()) {
+
+            directory.removeRecursively();
+
+        }
+        else
+        {
+            QFile file(filePath);
+            if (file.exists()) {
+
+                file.remove();
+
+            }
+        }
+    }
+
+    default:
+        break;
+    }
+}
+
+void SPPresenter::createDirectoryInPath(QString filePath) {
+
+    if (!QDir(filePath).exists()) {
+
+        return;
+
+    }
+
+    bool okButtonClicked;
+
+    auto directoryName = QInputDialog::getText(parentWidget, "New Directory", "New Directory Name", QLineEdit::Normal, "", &okButtonClicked);
+
+    if (!okButtonClicked || directoryName.isEmpty()) {
+
+        return;
+
+    }
+
+    auto directoryPath = filePath + QDir::separator() + directoryName;
+
+    cout << string(directoryPath.toUtf8()) << endl;
+
+    QDir().mkpath(directoryPath);
+}
+
 void SPPresenter::setProject(shared_ptr<SPProject> project) {
 
     this->project = project;
@@ -295,6 +362,46 @@ void SPPresenter::setProject(shared_ptr<SPProject> project) {
         delegate->presenterDidProjectUpdate(this, project);
 
     }
+}
+
+void SPPresenter::renamePath(QString filePath) {
+
+    auto oldName = filePath.split("/").last();
+
+    bool okButtonClicked;
+
+    auto newName = QInputDialog::getText(parentWidget, "Rename", "New Name", QLineEdit::Normal, oldName, &okButtonClicked);
+
+    if (!okButtonClicked || newName.isEmpty()) {
+
+        return;
+
+    }
+
+    auto directory = QDir(filePath);
+
+    auto oldPath = filePath;
+    auto newPathComponents = filePath.split("/");
+    newPathComponents.removeLast();
+    newPathComponents << newName;
+
+    auto newPath = newPathComponents.join(QDir::separator());
+
+    if (directory.exists()) {
+
+        QDir().rename(oldPath, newPath);
+
+    }
+    else
+    {
+        QFile file(filePath);
+        if (file.exists()) {
+
+            QFile().rename(oldPath, newPath);
+
+        }
+    }
+
 }
 
 void SPPresenter::toogleBreakpointForFilePathAtLine(QString filePath, int line) {

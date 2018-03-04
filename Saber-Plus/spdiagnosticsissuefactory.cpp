@@ -33,7 +33,7 @@ shared_ptr<SPDiagnosticIssue> SPDiagnosticsIssueFactory::issue(shared_ptr<string
             unusedClassData->unusedClassName = unusedClassName;
 
             issue->data = unusedClassData;
-            issue->type = SPDiagnosticIssueTypeUnusedClass;
+            issue->type = SPDiagnosticIssueTypeUndefinedClass;
 
             cout << unusedClassName->c_str() << endl;
 

@@ -18,7 +18,7 @@ public:
 
     void fix(shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList);
 
-    void fixUnusedClassIssue(shared_ptr<SPDiagnosticIssue> diagnosticIssue);
+    void fixUndefinedClassIssue(shared_ptr<SPDiagnosticIssue> diagnosticIssue);
 
     void fixUnusedParameterIssue(shared_ptr<SPDiagnosticIssue> diagnosticIssue);
 

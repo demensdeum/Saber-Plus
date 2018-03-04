@@ -59,6 +59,10 @@ public:
     void debuggerStepOver();
     void debuggerContinue();
 
+    void createDirectoryInPath(QString filePath);
+    void renamePath(QString filePath);
+    void deletePath(QString filePath);
+
     void debuggerSendCommand(shared_ptr<string> command);
 
     void saveCurrentFile();

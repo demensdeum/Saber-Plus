@@ -12,7 +12,7 @@ enum SPDiagnosticIssueType {
 
     SPDiagnosticIssueTypeGeneric,
     SPDiagnosticIssueTypeUnusedParameter,
-    SPDiagnosticIssueTypeUnusedClass
+    SPDiagnosticIssueTypeUndefinedClass
 
 };
 

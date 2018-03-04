@@ -191,6 +191,7 @@ void MainWindow::on_fileBrowser_clicked(const QModelIndex &index) {
 
     qDebug() << filePath;
 
+    selectedPath = filePath;
     openFile(filePath);
 
 }
@@ -496,4 +497,32 @@ void MainWindow::on_debuggerVariablesListView_clicked(const QModelIndex &index)
     }
 
     presenter->printVariable(selectedVariableNode);
+}
+
+void MainWindow::on_actionCreate_Directory_triggered()
+{
+    if (selectedPath.isEmpty()) {
+        return;
+    }
+
+    presenter->createDirectoryInPath(selectedPath);
+
+}
+
+void MainWindow::on_actionDelete_triggered()
+{
+    if (selectedPath.isEmpty()) {
+        return;
+    }
+
+    presenter->deletePath(selectedPath);
+}
+
+void MainWindow::on_actionRename_triggered()
+{
+    if (selectedPath.isEmpty()) {
+        return;
+    }
+
+    presenter->renamePath(selectedPath);
 }

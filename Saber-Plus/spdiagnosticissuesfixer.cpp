@@ -37,9 +37,9 @@ void SPDiagnosticIssuesFixer::projectIndexerDidFinishIndexing(SPProjectIndexer *
 
             break;
 
-        case SPDiagnosticIssueTypeUnusedClass:
+        case SPDiagnosticIssueTypeUndefinedClass:
 
-            fixUnusedClassIssue(diagnosticIssue);
+            fixUndefinedClassIssue(diagnosticIssue);
 
             break;
 
@@ -51,7 +51,7 @@ void SPDiagnosticIssuesFixer::projectIndexerDidFinishIndexing(SPProjectIndexer *
 
 // TODO: move it to other classes
 
-void SPDiagnosticIssuesFixer::fixUnusedClassIssue(shared_ptr<SPDiagnosticIssue> diagnosticIssue) {
+void SPDiagnosticIssuesFixer::fixUndefinedClassIssue(shared_ptr<SPDiagnosticIssue> diagnosticIssue) {
 
     if (diagnosticIssue->data.get() == nullptr)
     {

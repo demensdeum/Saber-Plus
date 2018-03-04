@@ -112,7 +112,7 @@
      <x>0</x>
      <y>0</y>
      <width>889</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -122,6 +122,11 @@
     <addaction name="actionNew_Project"/>
     <addaction name="actionOpen_CMAKE_Project"/>
     <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreate_Directory"/>
+    <addaction name="actionRename"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -344,6 +349,21 @@
   <action name="actionPrint_Variables">
    <property name="text">
     <string>Print &amp;Variables</string>
+   </property>
+  </action>
+  <action name="actionCreate_Directory">
+   <property name="text">
+    <string>Create Directory</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>Rename</string>
    </property>
   </action>
  </widget>

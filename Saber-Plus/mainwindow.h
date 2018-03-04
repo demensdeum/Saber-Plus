@@ -75,6 +75,12 @@ private slots:
 
     void on_debuggerVariablesListView_clicked(const QModelIndex &index);
 
+    void on_actionCreate_Directory_triggered();
+
+    void on_actionDelete_triggered();
+
+    void on_actionRename_triggered();
+
 public:
     virtual void presenterDidGetProcessVariableNodes(SPPresenter *presenter, shared_ptr<SPList<SPVariableNode> > variableNodesList);
     virtual void presenterDidGetProcessStackNodes(SPPresenter *presenter, shared_ptr<SPList<SPStackNode> > stackNodesList);
@@ -88,6 +94,7 @@ private:
 
      QFileSystemModel *filesystemModel;
 
+     QString selectedPath;
      QString currentOpenedSourceFilePath;
      bool currentFileChanged;
 
