@@ -526,3 +526,12 @@ void MainWindow::on_actionRename_triggered()
 
     presenter->renamePath(selectedPath);
 }
+
+void MainWindow::on_actionCreate_File_triggered()
+{
+    if (selectedPath.isEmpty()) {
+        return;
+    }
+
+    presenter->createFile(selectedPath);
+}

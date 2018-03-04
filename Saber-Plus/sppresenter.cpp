@@ -284,6 +284,32 @@ void SPPresenter::debuggerSendCommand(shared_ptr<string> command) {
 
 }
 
+void SPPresenter::createFile(QString filePath) {
+
+    bool okButtonClicked;
+
+    auto fileName = QInputDialog::getText(parentWidget, "New File", "New File", QLineEdit::Normal, "", &okButtonClicked);
+
+    if (!okButtonClicked || fileName.isEmpty()) {
+
+        return;
+
+    }
+
+    auto fileNamePath = filePath + QDir::separator() + fileName;
+
+    cout << string(fileNamePath.toUtf8()) << endl;
+
+    QFile outputFile(fileNamePath);
+    outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
+
+    QTextStream fileOutput(&outputFile);
+    fileOutput << QString("");
+
+    outputFile.close();
+
+}
+
 void SPPresenter::deletePath(QString filePath) {
 
     if (filePath.isEmpty()) {

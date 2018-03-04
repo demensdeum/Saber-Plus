@@ -123,6 +123,7 @@
     <addaction name="actionOpen_CMAKE_Project"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
+    <addaction name="actionCreate_File"/>
     <addaction name="actionCreate_Directory"/>
     <addaction name="actionRename"/>
     <addaction name="actionDelete"/>
@@ -364,6 +365,11 @@
   <action name="actionRename">
    <property name="text">
     <string>Rename</string>
+   </property>
+  </action>
+  <action name="actionCreate_File">
+   <property name="text">
+    <string>Create File</string>
    </property>
   </action>
  </widget>

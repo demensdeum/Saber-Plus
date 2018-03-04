@@ -77,6 +77,8 @@ public:
 
     void setProject(shared_ptr<SPProject> project);
 
+    void createFile(QString filePath);
+
     void toogleBreakpointForFilePathAtLine(QString filePath, int line);
 
     void searchTextInFiles(QString text);
