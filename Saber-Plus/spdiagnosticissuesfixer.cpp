@@ -58,7 +58,7 @@ void SPDiagnosticIssuesFixer::fixUndefinedClassIssue(shared_ptr<SPDiagnosticIssu
         return;
     }
 
-    shared_ptr<SPDiagnosticIssueDataUnusedClass> unusedClassData = std::static_pointer_cast<SPDiagnosticIssueDataUnusedClass>(diagnosticIssue->data);
+    shared_ptr<SPDiagnosticIssueDataUndefinedClass> unusedClassData = std::static_pointer_cast<SPDiagnosticIssueDataUndefinedClass>(diagnosticIssue->data);
 
     auto unusedClassName = unusedClassData->unusedClassName;
 

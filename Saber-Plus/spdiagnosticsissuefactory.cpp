@@ -17,7 +17,7 @@ shared_ptr<SPDiagnosticIssue> SPDiagnosticsIssueFactory::issue(shared_ptr<string
     auto issue = make_shared<SPDiagnosticIssue>(diagnosticIssueMessage, filePath, SPDiagnosticIssueTypeGeneric);
 
     {
-        // undefined class
+        // incomplete type
 
         auto regexp = QRegularExpression("error: invalid use of incomplete type .*class ([a-zA-Z]*)");
 
@@ -29,7 +29,32 @@ shared_ptr<SPDiagnosticIssue> SPDiagnosticsIssueFactory::issue(shared_ptr<string
 
             auto unusedClassName = make_shared<string>(match.captured(1).toUtf8());
 
-            auto unusedClassData = make_shared<SPDiagnosticIssueDataUnusedClass>();
+            auto unusedClassData = make_shared<SPDiagnosticIssueDataUndefinedClass>();
+            unusedClassData->unusedClassName = unusedClassName;
+
+            issue->data = unusedClassData;
+            issue->type = SPDiagnosticIssueTypeUndefinedClass;
+
+            cout << unusedClassName->c_str() << endl;
+
+            return issue;
+        }
+    }
+
+    {
+        // incomplete type
+
+        auto regexp = QRegularExpression("error: ‘([a-zA-Z]*)’ has not been declare");
+
+        auto matchIterator = regexp.globalMatch(QString(diagnosticIssueMessage->c_str()));
+
+        while (matchIterator.hasNext()) {
+
+            auto match = matchIterator.next();
+
+            auto unusedClassName = make_shared<string>(match.captured(1).toUtf8());
+
+            auto unusedClassData = make_shared<SPDiagnosticIssueDataUndefinedClass>();
             unusedClassData->unusedClassName = unusedClassName;
 
             issue->data = unusedClassData;

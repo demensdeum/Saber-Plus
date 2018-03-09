@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class SPDiagnosticIssueDataUnusedClass : public SPDiagnosticIssueData
+class SPDiagnosticIssueDataUndefinedClass : public SPDiagnosticIssueData
 {
 
 public:
