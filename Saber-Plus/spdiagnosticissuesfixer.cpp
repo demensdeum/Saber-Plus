@@ -76,6 +76,18 @@ void SPDiagnosticIssuesFixer::fixUndefinedClassIssue(shared_ptr<SPDiagnosticIssu
 
     auto unusedClassNameFile = projectIndexer->fileFromClassName(unusedClassName);
 
+    if (unusedClassNameFile.get() == nullptr) {
+
+        return;
+
+    }
+
+    if (unusedClassNameFile->path.get() == nullptr) {
+
+        return;
+
+    }
+
     cout << "Need to add this file path include to header:" << endl;
     cout << unusedClassNameFile->path->c_str() << endl;
 

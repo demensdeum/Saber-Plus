@@ -42,9 +42,34 @@ shared_ptr<SPDiagnosticIssue> SPDiagnosticsIssueFactory::issue(shared_ptr<string
     }
 
     {
-        // incomplete type
+        // not declared
 
         auto regexp = QRegularExpression("error: ‘([a-zA-Z]*)’ has not been declare");
+
+        auto matchIterator = regexp.globalMatch(QString(diagnosticIssueMessage->c_str()));
+
+        while (matchIterator.hasNext()) {
+
+            auto match = matchIterator.next();
+
+            auto unusedClassName = make_shared<string>(match.captured(1).toUtf8());
+
+            auto unusedClassData = make_shared<SPDiagnosticIssueDataUndefinedClass>();
+            unusedClassData->unusedClassName = unusedClassName;
+
+            issue->data = unusedClassData;
+            issue->type = SPDiagnosticIssueTypeUndefinedClass;
+
+            cout << unusedClassName->c_str() << endl;
+
+            return issue;
+        }
+    }
+
+    {
+        // not declared
+
+        auto regexp = QRegularExpression("error: ‘([a-zA-Z]*)’ was not declared in this scope");
 
         auto matchIterator = regexp.globalMatch(QString(diagnosticIssueMessage->c_str()));
 
