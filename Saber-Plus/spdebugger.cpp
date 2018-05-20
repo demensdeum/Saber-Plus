@@ -62,9 +62,11 @@ void SPDebugger::printVariables() {
 
     }
 
-    process->write("fr var --show-types --ptr-depth=0\n");
+    printVariableNode = shared_ptr<SPVariableNode>();
 
     state = kSPDebuggerVariablesPrintState;
+
+    process->write("fr var --show-types --ptr-depth=0\n");
 }
 
 void SPDebugger::stepIn() {
@@ -272,17 +274,49 @@ void SPDebugger::handleVariablePrintOutput(shared_ptr<string> output) {
     this->handleVariablesPrintOutput(output);
 }
 
+void SPDebugger::revertVariableNodesAfterError() {
+
+    variableNodesList = previousVariableNodesList;
+
+    delegate->debuggerDidGetProcessVariableNodes(this, variableNodesList);
+
+}
+
 void SPDebugger::handleVariablesPrintOutput(shared_ptr<string> output) {
 
     qDebug() << "handleVariablesPrintOutput: " << QString(output->c_str());
 
     auto outputString = QString(output->c_str());
 
+    if (outputString.contains("error: "))
+    {
+        revertVariableNodesAfterError();
+        return;
+    }
+
     auto regexp = QRegularExpression("\(.*\) (.*) = (.*)");
 
     auto matchIterator = regexp.globalMatch(outputString);
 
     auto variableNodesList = make_shared<SPList<SPVariableNode> >();
+
+    if (state == kSPDebuggerVariablePrintState)
+    {
+        if (printVariableNode->parent.get() != nullptr)
+        {
+            variableNodesList->add(printVariableNode->parent);
+        }
+        else
+        {
+            auto classIdentifier = make_shared<string>("root node class identifier");
+            auto name = make_shared<string>("/");
+            auto value = make_shared<string>("(go to root)");
+            auto postfix = make_shared<string>("[print root]");
+
+            auto variableNode = make_shared<SPVariableNode>(classIdentifier, name, value, postfix);
+            variableNodesList->add(variableNode);
+        }
+    }
 
     while (matchIterator.hasNext()) {
 
@@ -291,25 +325,42 @@ void SPDebugger::handleVariablesPrintOutput(shared_ptr<string> output) {
         auto classIdentifier = make_shared<string>(match.captured(1).toUtf8());
         auto name = make_shared<string>(match.captured(2).toUtf8());
         auto value = make_shared<string>(match.captured(3).toUtf8());
-        auto postfix = make_shared<string>("._M_ptr->");
+        auto postfix = make_shared<string>("->");
 
-        if (state == kSPDebuggerVariablePrintState)
+        if (classIdentifier->find("vector")  != string::npos)
         {
-            if (classIdentifier->find("vector")  != std::string::npos)
-            {
-                postfix = make_shared<string>("");
-            }
+            postfix = make_shared<string>("");
         }
+        else if (classIdentifier->find("shared_ptr") != string::npos)
+        {
+            postfix = make_shared<string>("._M_ptr->");
+        }
+        else
+        {
+            postfix = make_shared<string>(".");
+        }
+
 
         auto variableNode = make_shared<SPVariableNode>(classIdentifier, name, value, postfix);
         variableNode->parent = printVariableNode;
         variableNodesList->add(variableNode);
     }
 
+    this->variableNodesList = variableNodesList;
+
     delegate->debuggerDidGetProcessVariableNodes(this, variableNodesList);
 }
 
 void SPDebugger::printVariable(shared_ptr<SPVariableNode> variableNode) {
+
+    if (string(variableNode->name->c_str()) == "/") {
+
+        this->printVariables();
+        return;
+
+    }
+
+    previousVariableNodesList = variableNodesList;
 
     state = kSPDebuggerVariablePrintState;
 

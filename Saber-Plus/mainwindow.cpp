@@ -54,8 +54,8 @@ void MainWindow::presenterDidGetProcessVariableNodes(SPPresenter *presenter, sha
         auto item = variableNodesList->at(i);
 
         QString itemString = "";
-        itemString += QString(item->classIdentifier->c_str());
-        itemString += " ";
+        //itemString += QString(item->classIdentifier->c_str());
+        //itemString += " ";
         itemString += QString(item->name->c_str());
         itemString += " ";
         itemString += QString(item->value->c_str());

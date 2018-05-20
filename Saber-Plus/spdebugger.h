@@ -75,6 +75,8 @@ private:
     SPDebuggerState state;
     QProcess *process;
 
+    shared_ptr<SPList<SPVariableNode>> variableNodesList;
+    shared_ptr<SPList<SPVariableNode>> previousVariableNodesList;
     shared_ptr<SPVariableNode> printVariableNode;
 
     void readyReadStandardOutput();
@@ -83,6 +85,8 @@ private:
     void handleStackPrintOutput(shared_ptr<string> output);
     void handleVariablePrintOutput(shared_ptr<string> output);
     void handleVariablesPrintOutput(shared_ptr<string> output);
+
+    void revertVariableNodesAfterError();
 };
 
 #endif // SPDEBUGGER_H
