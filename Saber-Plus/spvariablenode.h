@@ -11,11 +11,12 @@ using namespace std;
 class SPVariableNode
 {
 public:
-    SPVariableNode(shared_ptr<string> classIdentifier, shared_ptr<string> name, shared_ptr<string> value);
+    SPVariableNode(shared_ptr<string> classIdentifier, shared_ptr<string> name, shared_ptr<string> value, shared_ptr<string> postfix);
 
     shared_ptr<string> classIdentifier;
     shared_ptr<string> name;
     shared_ptr<string> value;
+    shared_ptr<string> postfix;
 
     shared_ptr<string> fullPath();
 
