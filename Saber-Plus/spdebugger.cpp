@@ -331,6 +331,10 @@ void SPDebugger::handleVariablesPrintOutput(shared_ptr<string> output) {
         {
             postfix = make_shared<string>("");
         }
+        else if (classIdentifier->find("map")  != string::npos)
+        {
+            postfix = make_shared<string>("");
+        }
         else if (classIdentifier->find("shared_ptr") != string::npos)
         {
             postfix = make_shared<string>("._M_ptr->");
