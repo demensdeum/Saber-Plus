@@ -46,6 +46,11 @@ void MainWindow::presenterDidGetProcessVariableNodes(SPPresenter *presenter, sha
 
     this->variableNodesList = variableNodesList;
 
+    if (variableNodesList.get() == nullptr)
+    {
+        return;
+    }
+
     auto stringListModel = new QStringListModel();
     QStringList stringList;
 
@@ -279,13 +284,23 @@ void MainWindow::presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SP
 
 void MainWindow::presenterDidGetProcessOutput(SPPresenter *presenter, QString output) {
 
-    auto text = ui->output->toPlainText();
+    if (output.contains("error:"))
+    {
+        ui->output->setTextColor(Qt::red);
+    }
+    else if (output.contains("warning:"))
+    {
+        ui->output->setTextColor(Qt::darkGray);
+    }
+    else
+    {
+        ui->output->setTextColor(Qt::black);
+    }
 
-    text += output;
+    ui->output->append(output);
 
     auto verticalScrollBar = ui->output->verticalScrollBar();
 
-    ui->output->setText(text);
     verticalScrollBar->setValue(verticalScrollBar->maximum());
 
 }
