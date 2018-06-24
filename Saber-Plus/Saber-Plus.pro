@@ -4,9 +4,10 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+QT       += core gui
 
 TARGET = Saber-Plus
 TEMPLATE = app
@@ -36,7 +37,8 @@ SOURCES += main.cpp\
     spdiagnosticissue.cpp \
     spprojectclassesservice.cpp \
     spprojectclass.cpp \
-    spprojectindexer.cpp
+    spprojectindexer.cpp \
+    spprocessmonitorthread.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
@@ -64,6 +66,7 @@ HEADERS  += mainwindow.h \
     spdiagnosticissuedataunusedclass.h \
     spprojectclassesservice.h \
     spprojectindexer.h \
-    spclass.h
+    spclass.h \
+    spprocessmonitorthread.h
 
 FORMS    += mainwindow.ui

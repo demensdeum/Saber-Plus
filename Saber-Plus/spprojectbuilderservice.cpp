@@ -74,6 +74,15 @@ void SPProjectBuilderService::stateChanged(QProcess::ProcessState newState) {
             }
         }
     }
+    else if (newState == QProcess::Running) {
+
+        auto pid = process->pid();
+
+        processMonitorThread = new SPProcessMonitorThread();
+        processMonitorThread->pid = pid;
+        processMonitorThread->start();
+
+    }
 }
 
 void SPProjectBuilderService::readyReadStandardOutput() {
@@ -149,7 +158,6 @@ void SPProjectBuilderService::run() {
     QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
 
     process->start(project->projectExecutablePath->c_str());
-
 }
 
 void SPProjectBuilderService::clean() {

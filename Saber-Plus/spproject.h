@@ -27,6 +27,8 @@ public:
     shared_ptr<SPFile> fileAtPath(shared_ptr<string> filePath);
     shared_ptr<SPFile> makeFileWithPath(shared_ptr<string> filePath);
 
+    void removeAllBreakpoints();
+
     virtual void serialize(shared_ptr<string> path);
     virtual void deserialize(shared_ptr<string> path);
 };

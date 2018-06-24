@@ -9,6 +9,7 @@
 #include <memory>
 #include "sppresenter.h"
 #include "splist.h"
+#include "spprocessmonitorthread.h"
 
 #include "spdiagnosticissuedata.h"
 
@@ -83,6 +84,8 @@ private slots:
 
     void on_actionCreate_File_triggered();
 
+    void on_actionRemove_Breakpoints_triggered();
+
 public:
     virtual void presenterDidGetProcessVariableNodes(SPPresenter *presenter, shared_ptr<SPList<SPVariableNode> > variableNodesList);
     virtual void presenterDidGetProcessStackNodes(SPPresenter *presenter, shared_ptr<SPList<SPStackNode> > stackNodesList);
@@ -93,6 +96,8 @@ public:
 
 private:
      Ui::MainWindow *ui;
+
+     SPProcessMonitorThread *processMonitorThread;
 
      QFileSystemModel *filesystemModel;
 

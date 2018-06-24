@@ -6,6 +6,7 @@
 
 #include <QProcess>
 #include <spforwardstatemachine.h>
+#include <spprocessmonitorthread.h>
 
 using namespace std;
 
@@ -62,6 +63,8 @@ private:
     shared_ptr<SPForwardStateMachine> currentStateMachine;
 
     QProcess *process;
+
+    SPProcessMonitorThread *processMonitorThread;
 };
 
 #endif // SPPROJECTBUILDER_H

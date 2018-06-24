@@ -46,6 +46,13 @@ void SPPresenterDelegate::presenterDidGetProcessVariableNodes(SPPresenter *prese
 
 }
 
+void SPPresenterDelegate::presenterDidGetProcessMonitorOutput(SPPresenter *presenter, QString output) {
+
+    qDebug() << "Unused SPPresenterDelegate presenterDidGetProcessMonitorOutput call";
+
+}
+
+
 void SPPresenter::diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService *diagnosticsService, shared_ptr<SPList<SPDiagnosticIssue> > diagnosticIssuesList) {
 
     delegate->presenterDidFinishDiagnosticsDidFinishWithIssuesList(this, diagnosticIssuesList);
@@ -55,6 +62,12 @@ void SPPresenter::diagnosticsServiceDidFinishWithIssuesList(SPDiagnosticsService
 void SPPresenter::debuggerDidGetProcessOutput(SPDebugger *debugger, QString processOutput) {
 
     delegate->presenterDidGetProcessOutput(this, processOutput);
+
+}
+
+void SPPresenter::removeAllBreakpoints() {
+
+    debugger->removeAllBreakpoints();
 
 }
 

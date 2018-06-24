@@ -35,6 +35,20 @@ SPDebugger::SPDebugger(QObject *parent) : QObject(parent) {
 
 }
 
+void SPDebugger::removeAllBreakpoints() {
+
+    if (process == nullptr) {
+
+        return;
+    }
+
+    process->write("br delete\n");
+    process->write("y\n");
+
+    project->removeAllBreakpoints();
+
+}
+
 void SPDebugger::sendCommand(shared_ptr<string> command) {
 
     if (process == nullptr) {

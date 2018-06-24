@@ -59,8 +59,6 @@ void MainWindow::presenterDidGetProcessVariableNodes(SPPresenter *presenter, sha
         auto item = variableNodesList->at(i);
 
         QString itemString = "";
-        //itemString += QString(item->classIdentifier->c_str());
-        //itemString += " ";
         itemString += QString(item->name->c_str());
         itemString += " ";
         itemString += QString(item->value->c_str());
@@ -549,4 +547,9 @@ void MainWindow::on_actionCreate_File_triggered()
     }
 
     presenter->createFile(selectedPath);
+}
+
+void MainWindow::on_actionRemove_Breakpoints_triggered()
+{
+    presenter->removeAllBreakpoints();
 }

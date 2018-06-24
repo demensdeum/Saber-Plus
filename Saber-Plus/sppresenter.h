@@ -20,6 +20,7 @@ class SPPresenter;
 class SPPresenterDelegate
 {
 public:
+    virtual void presenterDidGetProcessMonitorOutput(SPPresenter *presenter, QString output);
     virtual void presenterDidProjectUpdate(SPPresenter *presenter, shared_ptr<SPProject> project);
     virtual void presenterDidGetProcessStackNodes(SPPresenter *presenter, shared_ptr<SPList<SPStackNode> > stackNodesList);
     virtual void presenterDidGetProcessVariableNodes(SPPresenter *presenter, shared_ptr<SPList<SPVariableNode> > variableNodesList);
@@ -84,6 +85,8 @@ public:
     void searchTextInFiles(QString text);
 
     void printVariable(shared_ptr<SPVariableNode> variableNode);
+
+    void removeAllBreakpoints();
 
     QWidget *parentWidget;
 

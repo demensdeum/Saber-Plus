@@ -20,3 +20,9 @@ void SPFile::toggleBreakpointAtLine(int line) {
         linesToBreakpointsMap[line] = breakpoint;
     }
 }
+
+void SPFile::removeAllBreakpoints() {
+
+    linesToBreakpointsMap.clear();
+
+}

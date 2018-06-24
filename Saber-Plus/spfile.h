@@ -23,6 +23,7 @@ public:
     unordered_map<int, shared_ptr<SPBreakpoint>> linesToBreakpointsMap;
 
     void toggleBreakpointAtLine(int line);
+    void removeAllBreakpoints();
 };
 
 #endif // SPFILE_H

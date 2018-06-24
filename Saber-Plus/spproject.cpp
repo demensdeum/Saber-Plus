@@ -13,6 +13,15 @@ SPProject::SPProject(shared_ptr<string> name, shared_ptr<string> projectWorkingD
 
 }
 
+void SPProject::removeAllBreakpoints() {
+
+    for (auto filePath : pathToFilesMap) {
+
+        filePath.second->removeAllBreakpoints();
+
+    }
+}
+
 shared_ptr<SPFile> SPProject::fileAtPath(shared_ptr<string> filePath) {
 
     auto filePathPointer = filePath.get();

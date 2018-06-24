@@ -61,6 +61,7 @@ public:
 
     void printStack();
     void printVariables();
+    void removeAllBreakpoints();
 
     void printVariable(shared_ptr<SPVariableNode> variableNode);
 
