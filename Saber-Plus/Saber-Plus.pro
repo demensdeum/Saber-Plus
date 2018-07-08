@@ -38,7 +38,8 @@ SOURCES += main.cpp\
     spprojectclassesservice.cpp \
     spprojectclass.cpp \
     spprojectindexer.cpp \
-    spprocessmonitorthread.cpp
+    spprocessmonitorthread.cpp \
+    highlighter.cpp
 
 HEADERS  += mainwindow.h \
     spdebugger.h \
@@ -67,6 +68,7 @@ HEADERS  += mainwindow.h \
     spprojectclassesservice.h \
     spprojectindexer.h \
     spclass.h \
-    spprocessmonitorthread.h
+    spprocessmonitorthread.h \
+    highlighter.h
 
 FORMS    += mainwindow.ui

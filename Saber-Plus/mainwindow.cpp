@@ -9,6 +9,7 @@
 #include <QScrollBar>
 #include <QTextBlock>
 #include <QStringListModel>
+#include "highlighter.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -222,6 +223,13 @@ void MainWindow::openFile(QString filePath) {
     currentOpenedSourceFilePath = filePath;
 
     currentFileChanged = false;
+
+    if (syntaxHighlighter != nullptr)
+    {
+        delete syntaxHighlighter;
+    }
+
+    syntaxHighlighter = new Highlighter(ui->textEdit->document());
 
 }
 
@@ -518,6 +526,8 @@ void MainWindow::on_debuggerStackListView_clicked(const QModelIndex &index)
 
         ui->textEdit->setTextCursor(textCursor);
     }
+
+    delete process;
 }
 
 

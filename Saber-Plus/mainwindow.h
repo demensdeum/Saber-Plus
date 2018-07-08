@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QProcess>
 
+#include <QSyntaxHighlighter>
 #include <memory>
 #include "sppresenter.h"
 #include "splist.h"
@@ -120,6 +121,8 @@ private:
      shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList;
      shared_ptr<SPList<SPStackNode> > stackNodesList;
      shared_ptr<SPList<SPVariableNode> > variableNodesList;
+
+     QSyntaxHighlighter *syntaxHighlighter = nullptr;
 };
 
 #endif // MAINWINDOW_H
