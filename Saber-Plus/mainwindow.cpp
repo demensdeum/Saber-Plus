@@ -486,16 +486,38 @@ void MainWindow::on_debuggerStackListView_clicked(const QModelIndex &index)
 
     QString filePath(selectedTextSearchInFilesMatch->filePath->c_str());
 
-    openFile(filePath);
+    auto process = new QProcess();
 
-    ui->textEdit->moveCursor(QTextCursor::Start);
+    QString projectDirectory = QString(presenter->project->projectDirectoryPath->c_str());
 
-    auto textCursor = ui->textEdit->textCursor();
+    QString processString = "find ";
+    processString += projectDirectory;
+    processString += " -name ";
+    processString += filePath;
 
-    ui->textEdit->setTextCursor(textCursor);
-    textCursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, selectedTextSearchInFilesMatch->line - 1);
+    process->setWorkingDirectory(projectDirectory);
+    process->start(processString);
+    process->waitForFinished();
 
-    ui->textEdit->setTextCursor(textCursor);
+    QString output = process->readAllStandardOutput();
+    qDebug() << output;
+
+    QString filePathAbsolute = output;
+    filePathAbsolute = filePathAbsolute.replace("\n","");
+
+    if (filePathAbsolute.length() > 0)
+    {
+        openFile(filePathAbsolute);
+
+        ui->textEdit->moveCursor(QTextCursor::Start);
+
+        auto textCursor = ui->textEdit->textCursor();
+
+        ui->textEdit->setTextCursor(textCursor);
+        textCursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, selectedTextSearchInFilesMatch->line - 1);
+
+        ui->textEdit->setTextCursor(textCursor);
+    }
 }
 
 

@@ -106,8 +106,10 @@ public:
 
     virtual void textSearchInFilesServiceDidFinishWithSearchMatchesList(SPTextSearchInFilesService *textSearchInFilesService, shared_ptr<SPList<SPTextSearchInFilesMatch> > textSearchInFilesMatchesList);
 
-private:
     shared_ptr<SPProject> project;
+
+private:
+
 
     unique_ptr<SPProjectBuilderService> projectBuilderService;
     unique_ptr<SPDiagnosticsService> diagnosticsService;
