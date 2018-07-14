@@ -172,7 +172,7 @@ void MainWindow::on_actionAbout_triggered() {
 
 void MainWindow::saveCurrentOpenedSourceFilePath() {
 
-    if (currentOpenedSourceFilePath.length() > 0 && currentFileChanged == true) {
+    if (currentOpenedSourceFilePath.length() > 0 && currentFileChanged == true && QFileInfo(currentOpenedSourceFilePath).exists()) {
 
         QFile outputFile(currentOpenedSourceFilePath);
         outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
