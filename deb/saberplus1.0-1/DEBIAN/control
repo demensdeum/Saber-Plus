@@ -1,0 +1,10 @@
+Package: Saber-Plus
+Version: 1.0-1
+Section: base
+Priority: optional
+Architecture: amd64
+Depends: libqt5gui5
+Maintainer: Ilia Prokhorov <demensdeum@gmail.com>
+Homepage: http://demensdeum.com
+Description: Saber-Plus
+ Simple, fast code editor
