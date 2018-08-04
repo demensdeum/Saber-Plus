@@ -172,7 +172,7 @@ void SPPresenter::diagnosticsServiceDidGetProcessOutput(SPDiagnosticsService *di
 
 void SPPresenter::showAboutInformation() {
 
-    QMessageBox::about(parentWidget,"Saber-Plus","Simple, fast code editor by Demens Deum 2017");
+    QMessageBox::about(parentWidget,"Saber-Plus Info","Simple, fast code editor by Demens Deum 2018. Saber-Plus 1.0");
 
 }
 
