@@ -2,7 +2,7 @@
 
 #include <QString>
 #include <QRegularExpression>
-
+#include <QDebug>
 #include <iostream>
 
 void SPTextSearchInFilesServiceDelegate::textSearchInFilesServiceDidGetProcessOutput(SPTextSearchInFilesService *textSearchInFilesService, QString output) {
@@ -28,9 +28,11 @@ void SPTextSearchInFilesService::stateChanged(QProcess::ProcessState newState) {
 
             cout << string(processOutput.toUtf8()) << endl;
 
-            auto regexp = QRegularExpression("(.*\\..*):([0-9]*):(.*)");
+            auto regexp = QRegularExpression("(.+?):([0-9]*):(.*)");
 
             auto matchIterator = regexp.globalMatch(processOutput);
+
+            qDebug() << processOutput;
 
             auto textSearchInFilesMatchesList = make_shared<SPList<SPTextSearchInFilesMatch> >();
 
