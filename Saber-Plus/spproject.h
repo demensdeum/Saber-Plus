@@ -16,6 +16,7 @@ public:
     SPProject();
 
     shared_ptr<string> name;
+    shared_ptr<string> runScript;
 
     shared_ptr<string> projectDirectoryPath;
 

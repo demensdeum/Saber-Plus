@@ -119,7 +119,7 @@
      <x>0</x>
      <y>0</y>
      <width>889</width>
-     <height>27</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -131,6 +131,7 @@
     <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_File"/>
+    <addaction name="actionCreate_C_Class"/>
     <addaction name="actionCreate_Directory"/>
     <addaction name="actionRename"/>
     <addaction name="actionDelete"/>
@@ -383,6 +384,11 @@
   <action name="actionRemove_Breakpoints">
    <property name="text">
     <string>Remove &amp;Breakpoints</string>
+   </property>
+  </action>
+  <action name="actionCreate_C_Class">
+   <property name="text">
+    <string>Create C++ Class</string>
    </property>
   </action>
  </widget>

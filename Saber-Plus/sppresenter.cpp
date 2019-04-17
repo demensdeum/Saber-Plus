@@ -297,6 +297,58 @@ void SPPresenter::debuggerSendCommand(shared_ptr<string> command) {
 
 }
 
+void SPPresenter::createCppClass(QString filePath) {
+
+    bool okButtonClicked;
+
+    auto fileName = QInputDialog::getText(parentWidget, "New C++ Class", "New C++ Class", QLineEdit::Normal, "", &okButtonClicked);
+
+    if (!okButtonClicked || fileName.isEmpty()) {
+
+        return;
+
+    }
+
+    {
+        auto fileNamePath = filePath + QDir::separator() + fileName + ".h";
+        cout << string(fileNamePath.toUtf8()) << endl;
+        QFile outputFile(fileNamePath);
+        outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream fileOutput(&outputFile);
+
+        fileOutput << QString("#ifndef ");
+        fileOutput << QString(project->name->c_str()).toUpper().replace(QRegExp("[^a-zA-Z\\s]"), "");
+        fileOutput << fileName.toUpper();
+        fileOutput << QString("_H_");
+        fileOutput << "\n";
+
+        fileOutput << QString("#define ");
+        fileOutput << QString(project->name->c_str()).toUpper().replace(QRegExp("[^a-zA-Z\\s]"), "");
+        fileOutput << fileName.toUpper();
+        fileOutput << QString("_H_");
+        fileOutput << "\n";
+
+        fileOutput << QString("\n\n\n");
+
+        fileOutput << QString("#endif");
+
+        outputFile.close();
+    }
+
+    {
+        auto fileNamePath = filePath + QDir::separator() + fileName + ".cpp";
+        cout << string(fileNamePath.toUtf8()) << endl;
+        QFile outputFile(fileNamePath);
+        outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream fileOutput(&outputFile);
+        fileOutput << QString("#include \"");
+        fileOutput << QString(fileName);
+        fileOutput << QString(".h\"\n\n\n");
+        outputFile.close();
+    }
+
+}
+
 void SPPresenter::createFile(QString filePath) {
 
     bool okButtonClicked;

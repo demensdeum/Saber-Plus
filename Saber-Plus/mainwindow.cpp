@@ -585,3 +585,12 @@ void MainWindow::on_actionRemove_Breakpoints_triggered()
 {
     presenter->removeAllBreakpoints();
 }
+
+void MainWindow::on_actionCreate_C_Class_triggered()
+{
+    if (selectedPath.isEmpty()) {
+        return;
+    }
+
+    presenter->createCppClass(selectedPath);
+}

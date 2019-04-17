@@ -144,20 +144,34 @@ bool SPProjectBuilderService::resolveProjectExecutableIfNeeded(shared_ptr<SPProj
 
 void SPProjectBuilderService::run() {
 
-    if (SPProjectBuilderService::resolveProjectExecutableIfNeeded(project) == false) {
+    if (project->runScript.get() != nullptr) {
 
-        return;
+        auto buildString = QString(project->runScript->c_str());
 
+        process = new QProcess();
+        process->setProcessChannelMode(QProcess::MergedChannels);
+
+        QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);
+        QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
+
+        process->setWorkingDirectory(QString(project->projectDirectoryPath->c_str()));
+        process->start(buildString);
     }
+    else {
 
-    process = new QProcess();
-    process->setWorkingDirectory(QString(project->projectProcessWorkingDirectoryPath->c_str()));
-    process->setProcessChannelMode(QProcess::MergedChannels);
+        if (SPProjectBuilderService::resolveProjectExecutableIfNeeded(project) == false) {
+            return;
+        }
 
-    QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);
-    QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
+        process = new QProcess();
+        process->setWorkingDirectory(QString(project->projectProcessWorkingDirectoryPath->c_str()));
+        process->setProcessChannelMode(QProcess::MergedChannels);
 
-    process->start(project->projectExecutablePath->c_str());
+        QObject::connect(process, &QProcess::readyReadStandardOutput, this, &SPProjectBuilderService::readyReadStandardOutput);
+        QObject::connect(process, &QProcess::stateChanged, this, &SPProjectBuilderService::stateChanged);
+
+        process->start(project->projectExecutablePath->c_str());
+    }
 }
 
 void SPProjectBuilderService::clean() {
